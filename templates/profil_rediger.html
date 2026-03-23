@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Rediger Profil - Nabohjelpen{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 0 auto;">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Rediger Profil</h2>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label>{{ form.telefon.label }}</label>
+                    {{ form.telefon }}
+                    {% if form.telefon.errors %}{{ form.telefon.errors }}{% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label>{{ form.kan_hjelpe_med.label }}</label>
+                    {{ form.kan_hjelpe_med }}
+                    <small class="text-muted">F.eks.: handle, kjøre bil, teknisk hjelp</small>
+                    {% if form.kan_hjelpe_med.errors %}{{ form.kan_hjelpe_med.errors }}{% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label>{{ form.allergier_hensyn.label }}</label>
+                    {{ form.allergier_hensyn }}
+                    <small class="text-muted">Allergi, dyreallergi, andre viktige hensyn</small>
+                    {% if form.allergier_hensyn.errors %}{{ form.allergier_hensyn.errors }}{% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label>{{ form.tilgjengelighet.label }}</label>
+                    {{ form.tilgjengelighet }}
+                    <small class="text-muted">F.eks.: Mandag-fredag ettermiddag, helger</small>
+                    {% if form.tilgjengelighet.errors %}{{ form.tilgjengelighet.errors }}{% endif %}
+                </div>
+
+                <div class="mt-2">
+                    <button type="submit" class="btn btn-success">Lagre endringer</button>
+                    <a href="{% url 'profil_detalj' %}" class="btn btn-secondary">Avbryt</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

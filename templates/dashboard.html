@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Nabohjelpen{% endblock %}
+
+{% block content %}
+<h1>Hei, {{ user.first_name|default:user.username }}! 👋</h1>
+
+<div class="grid">
+    <!-- Profil info -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Min Profil</h3>
+        </div>
+        <div class="card-body">
+            <p><strong>Navn:</strong> {{ user.get_full_name }}</p>
+            <p><strong>E-post:</strong> {{ user.email }}</p>
+            <p><strong>Telefon:</strong> {{ bruker_profil.telefon|default:"Ikke angitt" }}</p>
+            <div class="mt-1">
+                <a href="{% url 'profil_detalj' %}" class="btn btn-primary btn-small">Se profil</a>
+                <a href="{% url 'profil_rediger' %}" class="btn btn-primary btn-small">Rediger</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistikk -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Min Aktivitet</h3>
+        </div>
+        <div class="card-body">
+            <p><strong>Påmeldte oppdrag:</strong> {{ pameldte_oppdrag.count }}</p>
+            <p class="text-muted"><small>Du er påmeldt {{ pameldte_oppdrag.count }} oppdrag</small></p>
+        </div>
+    </div>
+</div>
+
+<!-- Påmeldte oppdrag -->
+<div class="mt-2">
+    <h2>Mine oppdrag</h2>
+    {% if pameldte_oppdrag %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Tittel</th>
+                    <th>Kategori</th>
+                    <th>Sted</th>
+                    <th>Status</th>
+                    <th>Handling</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for oppdrag in pameldte_oppdrag %}
+                    <tr>
+                        <td><strong>{{ oppdrag.tittel }}</strong></td>
+                        <td>{{ oppdrag.kategori }}</td>
+                        <td>{{ oppdrag.sted }}</td>
+                        <td>
+                            {% if oppdrag.status == 'aapen' %}
+                                <span class="badge badge-success">Åpen</span>
+                            {% elif oppdrag.status == 'paagaar' %}
+                                <span class="badge badge-warning">Pågår</span>
+                            {% else %}
+                                <span class="badge badge-danger">Fullført</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'oppdrag_detalj' oppdrag.pk %}" class="btn btn-primary btn-small">Detaljer</a>
+                            <form method="post" action="{% url 'avmeld' oppdrag.pk %}" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-small">Avmeld</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="text-muted">Du er ikke påmeldt noen oppdrag ennå</p>
+        <a href="{% url 'oppdrag_liste' %}" class="btn btn-primary">Se alle oppdrag</a>
+    {% endif %}
+</div>
+
+<!-- Farlige handlinger -->
+<div class="card mt-2" style="border-left: 4px solid #e74c3c;">
+    <div class="card-header">
+        <h3 class="card-title">Farlige handlinger</h3>
+    </div>
+    <div class="card-body">
+        <p>Hvis du ønsker å slette kontoen din, kan du gjøre det her. <strong>Dette kan ikke angres!</strong></p>
+        <a href="{% url 'slett_konto' %}" class="btn btn-danger">Slett konto</a>
+    </div>
+</div>
+{% endblock %}

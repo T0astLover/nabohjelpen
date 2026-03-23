@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}Oppdrag - Nabohjelpen{% endblock %}
+
+{% block content %}
+<h1>Oppdrag 📋</h1>
+
+<!-- Administrasjon -->
+{% if user.is_staff %}
+    <p>
+        <a href="{% url 'oppdrag_opprett' %}" class="btn btn-success">+ Opprett nytt oppdrag</a>
+    </p>
+{% endif %}
+
+<!-- Søk og filter -->
+<div class="card mb-2">
+    <div class="card-body">
+        <form method="get" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 200px;">
+                <input type="text" name="search" placeholder="Søk i oppdrag..." value="{{ request.GET.search }}" class="form-control">
+            </div>
+            
+            <div style="flex: 1; min-width: 200px;">
+                <select name="kategori" class="form-control">
+                    <option value="">-- Alle kategorier --</option>
+                    {% for kat in kategorier %}
+                        <option value="{{ kat.id }}" {% if request.GET.kategori|stringformat:"s" == kat.id|stringformat:"s" %}selected{% endif %}>
+                            {{ kat.navn }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div style="flex: 1; min-width: 200px;">
+                <select name="status" class="form-control">
+                    <option value="">-- Alle status --</option>
+                    {% for val, label in status_choices %}
+                        <option value="{{ val }}" {% if request.GET.status == val %}selected{% endif %}>
+                            {{ label }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Søk</button>
+        </form>
+    </div>
+</div>
+
+<!-- Liste over oppdrag -->
+{% if oppdrag %}
+    <table>
+        <thead>
+            <tr>
+                <th>Tittel</th>
+                <th>Kategori</th>
+                <th>Sted</th>
+                <th>Status</th>
+                <th>Påmeldte</th>
+                <th>Handling</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for oppdrag in oppdrag %}
+                <tr>
+                    <td><strong>{{ oppdrag.tittel }}</strong></td>
+                    <td>{{ oppdrag.kategori }}</td>
+                    <td>{{ oppdrag.sted }}</td>
+                    <td>
+                        {% if oppdrag.status == 'aapen' %}
+                            <span class="badge badge-success">Åpen</span>
+                        {% elif oppdrag.status == 'paagaar' %}
+                            <span class="badge badge-warning">Pågår</span>
+                        {% else %}
+                            <span class="badge badge-danger">Fullført</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ oppdrag.antall_pameldte }}</td>
+                    <td>
+                        <a href="{% url 'oppdrag_detalj' oppdrag.pk %}" class="btn btn-primary btn-small">Detaljer</a>
+                        {% if user.is_staff %}
+                            <a href="{% url 'oppdrag_rediger' oppdrag.pk %}" class="btn btn-primary btn-small">Rediger</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="?page=1&{{ request.GET.urlencode }}">« Første</a>
+                <a href="?page={{ page_obj.previous_page_number }}&{{ request.GET.urlencode }}">‹ Forrige</a>
+            {% endif %}
+
+            <span>Side {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}</span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}&{{ request.GET.urlencode }}">Neste ›</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}&{{ request.GET.urlencode }}">Siste »</a>
+            {% endif %}
+        </div>
+    {% endif %}
+{% else %}
+    <div class="card">
+        <div class="card-body text-center">
+            <p class="text-muted">Ingen oppdrag funnet. Prøv et annet søk eller filter.</p>
+        </div>
+    </div>
+{% endif %}
+{% endblock %}

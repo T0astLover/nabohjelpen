@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Kategorier - Nabohjelpen{% endblock %}
+
+{% block content %}
+<h1>Kategorier 📂</h1>
+
+<p>
+    <a href="{% url 'kategori_opprett' %}" class="btn btn-success">+ Opprett kategori</a>
+</p>
+
+{% if kategorier %}
+    <table>
+        <thead>
+            <tr>
+                <th>Navn</th>
+                <th>Beskrivelse</th>
+                <th>Opprettet</th>
+                <th>Handling</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for kategori in kategorier %}
+                <tr>
+                    <td><strong>{{ kategori.navn }}</strong></td>
+                    <td>{{ kategori.beskrivelse|truncatewords:15 }}</td>
+                    <td>{{ kategori.opprettet|date:"d. M Y" }}</td>
+                    <td>
+                        <a href="{% url 'kategori_rediger' kategori.pk %}" class="btn btn-primary btn-small">Rediger</a>
+                        <a href="{% url 'kategori_slett' kategori.pk %}" class="btn btn-danger btn-small">Slett</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <div class="card">
+        <div class="card-body text-center">
+            <p class="text-muted">Ingen kategorier opprettet enda</p>
+        </div>
+    </div>
+{% endif %}
+{% endblock %}

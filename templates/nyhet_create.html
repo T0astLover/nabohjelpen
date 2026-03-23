@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Publiser Nyhet - Nabohjelpen{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 0 auto;">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Publiser Nyhet</h2>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label>{{ form.tittel.label }}</label>
+                    {{ form.tittel }}
+                    {% if form.tittel.errors %}{{ form.tittel.errors }}{% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label>{{ form.innhold.label }}</label>
+                    {{ form.innhold }}
+                    {% if form.innhold.errors %}{{ form.innhold.errors }}{% endif %}
+                </div>
+
+                <div class="mt-2">
+                    <button type="submit" class="btn btn-success">Publiser</button>
+                    <a href="{% url 'nyhet_liste' %}" class="btn btn-secondary">Avbryt</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

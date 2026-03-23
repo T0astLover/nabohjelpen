@@ -1,0 +1,363 @@
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic import (
+    TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
+)
+from django.views import View
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.models import User
+from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib import messages
+from django.urls import reverse_lazy
+from django.db.models import Q
+from .models import Oppdrag, Profil, Nyhet, Kategori
+from .forms import (
+    RegistreringForm, ProfilForm, OppdragForm, NyhetForm, KategoriForm
+)
+
+
+# ============== AUTENTISERING ==============
+
+class ForsidenView(TemplateView):
+    """Forside med oversikt"""
+    template_name = 'forsiden.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['antall_medlemmer'] = User.objects.filter(is_staff=False).count()
+        context['nyeste_oppdrag'] = Oppdrag.objects.filter(status='aapen')[:3]
+        context['nyeste_nyheter'] = Nyhet.objects.all()[:3]
+        return context
+
+
+class RegistreringView(CreateView):
+    """Registrering av ny bruker"""
+    model = User
+    form_class = RegistreringForm
+    template_name = 'registrering.html'
+    success_url = reverse_lazy('login')
+
+    def form_valid(self, form):
+        # Lagre bruker
+        response = super().form_valid(form)
+        # Hent telefon fra form data
+        telefon = form.cleaned_data.get('telefon', '')
+        # Oppdater profilen med telefon
+        user = self.object
+        user.profil.telefon = telefon
+        user.profil.save()
+        messages.success(self.request, 'Bruker opprettet! Logg inn med dine detaljer.')
+        return response
+
+
+class ProsjektLoginView(LoginView):
+    """Login"""
+    template_name = 'login.html'
+    redirect_authenticated_user = True
+
+
+class ProsjektLogoutView(LogoutView):
+    """Logout"""
+    next_page = reverse_lazy('forsiden')
+
+
+# ============== BRUKER-DASHBOARD ==============
+
+class DashboardView(LoginRequiredMixin, TemplateView):
+    """Bruker dashboard"""
+    template_name = 'dashboard.html'
+    login_url = 'login'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['bruker_profil'] = self.request.user.profil
+        context['pameldte_oppdrag'] = self.request.user.pameldte_oppdrag.all()
+        return context
+
+
+# ============== PROFIL-VIEWS ==============
+
+class ProfilDetailView(LoginRequiredMixin, DetailView):
+    """Vis brukers profil"""
+    model = Profil
+    template_name = 'profil_detalj.html'
+    context_object_name = 'profil'
+    login_url = 'login'
+
+    def get_object(self):
+        return self.request.user.profil
+
+
+class ProfilUpdateView(LoginRequiredMixin, UpdateView):
+    """Rediger brukers profil"""
+    model = Profil
+    form_class = ProfilForm
+    template_name = 'profil_rediger.html'
+    success_url = reverse_lazy('profil_detalj')
+    login_url = 'login'
+
+    def get_object(self):
+        return self.request.user.profil
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Profil oppdatert!')
+        return super().form_valid(form)
+
+
+class SlettKontoView(LoginRequiredMixin, DeleteView):
+    """Slett brukerkontoView"""
+    model = User
+    template_name = 'slett_konto.html'
+    success_url = reverse_lazy('forsiden')
+    login_url = 'login'
+
+    def get_object(self):
+        return self.request.user
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(request, 'Kontoen din er slettet.')
+        return super().delete(request, *args, **kwargs)
+
+
+# ============== OPPDRAG-VIEWS ==============
+
+class OppdragListView(ListView):
+    """Liste over alle oppdrag"""
+    model = Oppdrag
+    template_name = 'oppdrag_liste.html'
+    context_object_name = 'oppdrag'
+    paginate_by = 10
+
+    def get_queryset(self):
+        qs = Oppdrag.objects.all().order_by('-opprettet')
+        
+        # Filter på status
+        status = self.request.GET.get('status', '')
+        if status:
+            qs = qs.filter(status=status)
+        
+        # Filter på kategori
+        kategori = self.request.GET.get('kategori', '')
+        if kategori:
+            qs = qs.filter(kategori__id=kategori)
+        
+        # Søk
+        search = self.request.GET.get('search', '')
+        if search:
+            qs = qs.filter(
+                Q(tittel__icontains=search) | Q(beskrivelse__icontains=search)
+            )
+        
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['kategorier'] = Kategori.objects.all()
+        context['status_choices'] = Oppdrag.STATUS_CHOICES
+        return context
+
+
+class OppdragDetailView(DetailView):
+    """Detalj om oppdrag"""
+    model = Oppdrag
+    template_name = 'oppdrag_detalj.html'
+    context_object_name = 'oppdrag'
+
+
+class OppdragCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    """Opprett nytt oppdrag (admin)"""
+    model = Oppdrag
+    form_class = OppdragForm
+    template_name = 'oppdrag_create.html'
+    success_url = reverse_lazy('oppdrag_liste')
+    login_url = 'login'
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def form_valid(self, form):
+        form.instance.opprettet_av = self.request.user
+        messages.success(self.request, 'Oppdrag opprettet!')
+        return super().form_valid(form)
+
+
+class OppdragUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    """Rediger oppdrag (admin)"""
+    model = Oppdrag
+    form_class = OppdragForm
+    template_name = 'oppdrag_update.html'
+    success_url = reverse_lazy('oppdrag_liste')
+    login_url = 'login'
+
+    def test_func(self):
+        return self.request.user.is_staff or self.get_object().opprettet_av == self.request.user
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Oppdrag oppdatert!')
+        return super().form_valid(form)
+
+
+class OppdragDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    """Slett oppdrag (admin)"""
+    model = Oppdrag
+    template_name = 'oppdrag_delete.html'
+    success_url = reverse_lazy('oppdrag_liste')
+    login_url = 'login'
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(request, 'Oppdrag slettet!')
+        return super().delete(request, *args, **kwargs)
+
+
+class PameldingView(LoginRequiredMixin, View):
+    """Meld deg på oppdrag"""
+    login_url = 'login'
+
+    def post(self, request, pk):
+        oppdrag = get_object_or_404(Oppdrag, pk=pk)
+        if request.user not in oppdrag.pameldte.all():
+            oppdrag.pameldte.add(request.user)
+            messages.success(request, f'Du er nå påmeldt "{oppdrag.tittel}"!')
+        else:
+            messages.info(request, 'Du er allerede påmeldt dette oppdraget.')
+        return redirect('oppdrag_detalj', pk=pk)
+
+
+class AvmeldingView(LoginRequiredMixin, View):
+    """Meld deg av oppdrag"""
+    login_url = 'login'
+
+    def post(self, request, pk):
+        oppdrag = get_object_or_404(Oppdrag, pk=pk)
+        if request.user in oppdrag.pameldte.all():
+            oppdrag.pameldte.remove(request.user)
+            messages.success(request, f'Du er nå avmeldt "{oppdrag.tittel}".')
+        return redirect('oppdrag_detalj', pk=pk)
+
+
+# ============== NYHETER-VIEWS ==============
+
+class NyhetListView(ListView):
+    """Liste over nyheter"""
+    model = Nyhet
+    template_name = 'nyhet_liste.html'
+    context_object_name = 'nyheter'
+    paginate_by = 10
+    ordering = '-publisert_dato'
+
+
+class NyhetDetailView(DetailView):
+    """Detalj om nyhet"""
+    model = Nyhet
+    template_name = 'nyhet_detalj.html'
+    context_object_name = 'nyhet'
+
+
+class NyhetCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    """Opprett nyhet (admin)"""
+    model = Nyhet
+    form_class = NyhetForm
+    template_name = 'nyhet_create.html'
+    success_url = reverse_lazy('nyhet_liste')
+    login_url = 'login'
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def form_valid(self, form):
+        form.instance.opprettet_av = self.request.user
+        messages.success(self.request, 'Nyhet publisert!')
+        return super().form_valid(form)
+
+
+class NyhetUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    """Rediger nyhet (admin)"""
+    model = Nyhet
+    form_class = NyhetForm
+    template_name = 'nyhet_update.html'
+    success_url = reverse_lazy('nyhet_liste')
+    login_url = 'login'
+
+    def test_func(self):
+        return self.request.user.is_staff or self.get_object().opprettet_av == self.request.user
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Nyhet oppdatert!')
+        return super().form_valid(form)
+
+
+class NyhetDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    """Slett nyhet (admin)"""
+    model = Nyhet
+    template_name = 'nyhet_delete.html'
+    success_url = reverse_lazy('nyhet_liste')
+    login_url = 'login'
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(request, 'Nyhet slettet!')
+        return super().delete(request, *args, **kwargs)
+
+
+# ============== KATEGORI-VIEWS ==============
+
+class KategoriListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+    """Liste over kategorier (admin)"""
+    model = Kategori
+    template_name = 'kategori_liste.html'
+    context_object_name = 'kategorier'
+    login_url = 'login'
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+
+class KategoriCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    """Opprett kategori (admin)"""
+    model = Kategori
+    form_class = KategoriForm
+    template_name = 'kategori_create.html'
+    success_url = reverse_lazy('kategori_liste')
+    login_url = 'login'
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Kategori opprettet!')
+        return super().form_valid(form)
+
+
+class KategoriUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    """Rediger kategori (admin)"""
+    model = Kategori
+    form_class = KategoriForm
+    template_name = 'kategori_update.html'
+    success_url = reverse_lazy('kategori_liste')
+    login_url = 'login'
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Kategori oppdatert!')
+        return super().form_valid(form)
+
+
+class KategoriDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    """Slett kategori (admin)"""
+    model = Kategori
+    template_name = 'kategori_delete.html'
+    success_url = reverse_lazy('kategori_liste')
+    login_url = 'login'
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(request, 'Kategori slettet!')
+        return super().delete(request, *args, **kwargs)

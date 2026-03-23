@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Nyheter - Nabohjelpen{% endblock %}
+
+{% block content %}
+<h1>Nyheter 📰</h1>
+
+<!-- Administrasjon -->
+{% if user.is_staff %}
+    <p>
+        <a href="{% url 'nyhet_opprett' %}" class="btn btn-success">+ Publiser nyhet</a>
+    </p>
+{% endif %}
+
+<!-- Liste over nyheter -->
+{% if nyheter %}
+    <div class="grid">
+        {% for nyhet in nyheter %}
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">{{ nyhet.tittel }}</h3>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">
+                        <small>
+                            Publisert: {{ nyhet.publisert_dato|date:"d. M Y H:i" }}
+                            av {{ nyhet.opprettet_av.get_full_name|default:nyhet.opprettet_av.username }}
+                        </small>
+                    </p>
+                    <p>{{ nyhet.innhold|truncatewords:30 }}</p>
+                    <div>
+                        <a href="{% url 'nyhet_detalj' nyhet.pk %}" class="btn btn-primary btn-small">Les videre</a>
+                        {% if user.is_staff %}
+                            <a href="{% url 'nyhet_rediger' nyhet.pk %}" class="btn btn-primary btn-small">Rediger</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">« Første</a>
+                <a href="?page={{ page_obj.previous_page_number }}">‹ Forrige</a>
+            {% endif %}
+
+            <span>Side {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}</span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">Neste ›</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">Siste »</a>
+            {% endif %}
+        </div>
+    {% endif %}
+{% else %}
+    <div class="card">
+        <div class="card-body text-center">
+            <p class="text-muted">Ingen nyheter enda</p>
+        </div>
+    </div>
+{% endif %}
+{% endblock %}

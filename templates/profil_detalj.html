@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Min Profil - Nabohjelpen{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 0 auto;">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Min Profil</h2>
+        </div>
+        <div class="card-body">
+            <table style="width: 100%; border: none;">
+                <tr style="border: none;">
+                    <td style="border: none; font-weight: bold; width: 150px;">Navn:</td>
+                    <td style="border: none;">{{ profil.user.get_full_name }}</td>
+                </tr>
+                <tr style="border: none;">
+                    <td style="border: none; font-weight: bold;">Brukernavn:</td>
+                    <td style="border: none;">{{ profil.user.username }}</td>
+                </tr>
+                <tr style="border: none;">
+                    <td style="border: none; font-weight: bold;">E-post:</td>
+                    <td style="border: none;">{{ profil.user.email }}</td>
+                </tr>
+                <tr style="border: none;">
+                    <td style="border: none; font-weight: bold;">Telefon:</td>
+                    <td style="border: none;">{{ profil.telefon|default:"Ikke angitt" }}</td>
+                </tr>
+                <tr style="border: none;">
+                    <td style="border: none; font-weight: bold;">Medlem siden:</td>
+                    <td style="border: none;">{{ profil.opprettet|date:"d. M Y" }}</td>
+                </tr>
+            </table>
+
+            <hr style="margin: 1rem 0; border: none; border-top: 1px solid #bdc3c7;">
+
+            <h3>Kan hjelpe med</h3>
+            <p>{{ profil.kan_hjelpe_med|default:"Ikke angitt" }}</p>
+
+            <h3>Allergier & hensyn</h3>
+            <p>{{ profil.allergier_hensyn|default:"Ikke angitt" }}</p>
+
+            <h3>Tilgjengelighet</h3>
+            <p>{{ profil.tilgjengelighet|default:"Ikke angitt" }}</p>
+
+            <div class="mt-2">
+                <a href="{% url 'profil_rediger' %}" class="btn btn-primary">Rediger profil</a>
+                <a href="{% url 'dashboard' %}" class="btn btn-secondary">Tilbake</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
