@@ -24,6 +24,8 @@ class ForsidenView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['antall_medlemmer'] = User.objects.filter(is_staff=False).count()
+        context['aapne_oppdrag_count'] = Oppdrag.objects.filter(status='aapen').count()
+        context['fullforte_oppdrag_count'] = Oppdrag.objects.filter(status='fullfort').count()
         context['nyeste_oppdrag'] = Oppdrag.objects.filter(status='aapen')[:3]
         context['nyeste_nyheter'] = Nyhet.objects.all()[:3]
         return context
