@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="nb">
+<html lang="{{ request.LANGUAGE_CODE|default:'nb' }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load i18n %}
     <title>{% block title %}Nabohjelpen{% endblock %}</title>
     <style>
         :root {
@@ -140,6 +141,22 @@
         .theme-select {
             width: auto;
             min-width: 130px;
+            padding: 0.3rem 0.5rem;
+            margin: 0;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background-color: var(--surface);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+        .language-form {
+            margin: 0;
+        }
+
+        .language-select {
+            width: auto;
+            min-width: 95px;
             padding: 0.3rem 0.5rem;
             margin: 0;
             border: 1px solid var(--border);
@@ -461,29 +478,39 @@
             <li><a href="{% url 'forsiden' %}" class="nav-brand">🏘️ Nabohjelpen</a></li>
             <li style="flex: 1;"></li>
             <li>
-                <select id="theme-select" class="theme-select" aria-label="Velg tema">
-                    <option value="light">Lys tema</option>
-                    <option value="dark">Dark theme</option>
-                    <option value="black">Svart theme</option>
+                <form action="{% url 'set_language' %}" method="post" class="language-form">
+                    {% csrf_token %}
+                    <input name="next" type="hidden" value="{{ request.get_full_path }}">
+                    <select name="language" class="language-select" aria-label="{% trans 'Velg språk' %}" onchange="this.form.submit()">
+                        <option value="nb" {% if request.LANGUAGE_CODE == 'nb' %}selected{% endif %}>Norsk</option>
+                        <option value="en" {% if request.LANGUAGE_CODE == 'en' %}selected{% endif %}>English</option>
+                    </select>
+                </form>
+            </li>
+            <li>
+                <select id="theme-select" class="theme-select" aria-label="{% trans 'Velg tema' %}">
+                    <option value="light">{% trans 'Lys tema' %}</option>
+                    <option value="dark">{% trans 'Morkt tema' %}</option>
+                    <option value="black">{% trans 'Svart tema' %}</option>
                 </select>
             </li>
-            <li><a href="{% url 'oppdrag_liste' %}">Oppdrag</a></li>
-            <li><a href="{% url 'nyhet_liste' %}">Nyheter</a></li>
+            <li><a href="{% url 'oppdrag_liste' %}">{% trans 'Oppdrag' %}</a></li>
+            <li><a href="{% url 'nyhet_liste' %}">{% trans 'Nyheter' %}</a></li>
             {% if user.is_authenticated %}
                 {% if user.is_staff %}
-                    <li><a href="{% url 'kategori_liste' %}">Kategorier</a></li>
+                    <li><a href="{% url 'kategori_liste' %}">{% trans 'Kategorier' %}</a></li>
                 {% endif %}
-                <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
-                <li><a href="{% url 'profil_detalj' %}">Profil</a></li>
+                <li><a href="{% url 'dashboard' %}">{% trans 'Dashboard' %}</a></li>
+                <li><a href="{% url 'profil_detalj' %}">{% trans 'Profil' %}</a></li>
                 <li>
                     <form method="post" action="{% url 'logout' %}" class="logout-form">
                         {% csrf_token %}
-                        <button type="submit">Logg ut</button>
+                        <button type="submit">{% trans 'Logg ut' %}</button>
                     </form>
                 </li>
             {% else %}
-                <li class="nav-right"><a href="{% url 'login' %}" class="btn btn-primary btn-small">Logg inn</a></li>
-                <li><a href="{% url 'registrering' %}" class="btn btn-success btn-small">Registrer deg</a></li>
+                <li class="nav-right"><a href="{% url 'login' %}" class="btn btn-primary btn-small">{% trans 'Logg inn' %}</a></li>
+                <li><a href="{% url 'registrering' %}" class="btn btn-success btn-small">{% trans 'Registrer deg' %}</a></li>
             {% endif %}
         </ul>
     </nav>
@@ -507,7 +534,7 @@
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2026 Nabohjelpen - En plattform for frivillig innsats i lokalsamfunnet</p>
+        <p>&copy; 2026 Nabohjelpen - {% trans 'En plattform for frivillig innsats i lokalsamfunnet' %}</p>
     </footer>
 
     <script>

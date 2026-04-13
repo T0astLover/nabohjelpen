@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block title %}{{ oppdrag.tittel }} - Nabohjelpen{% endblock %}
 
@@ -11,47 +12,47 @@
         <div class="card-body">
             <table style="width: 100%; border: none;">
                 <tr style="border: none;">
-                    <td style="border: none; font-weight: bold; width: 150px;">Kategori:</td>
+                    <td style="border: none; font-weight: bold; width: 150px;">{% trans 'Kategori:' %}</td>
                     <td style="border: none;">{{ oppdrag.kategori }}</td>
                 </tr>
                 <tr style="border: none;">
-                    <td style="border: none; font-weight: bold;">Sted:</td>
+                    <td style="border: none; font-weight: bold;">{% trans 'Sted:' %}</td>
                     <td style="border: none;">{{ oppdrag.sted }}</td>
                 </tr>
                 <tr style="border: none;">
-                    <td style="border: none; font-weight: bold;">Status:</td>
+                    <td style="border: none; font-weight: bold;">{% trans 'Status:' %}</td>
                     <td style="border: none;">
                         {% if oppdrag.status == 'aapen' %}
-                            <span class="badge badge-success">Åpen</span>
+                            <span class="badge badge-success">{% trans 'Åpen' %}</span>
                         {% elif oppdrag.status == 'paagaar' %}
-                            <span class="badge badge-warning">Pågår</span>
+                            <span class="badge badge-warning">{% trans 'Pågår' %}</span>
                         {% else %}
-                            <span class="badge badge-danger">Fullført</span>
+                            <span class="badge badge-danger">{% trans 'Fullført' %}</span>
                         {% endif %}
                     </td>
                 </tr>
                 <tr style="border: none;">
-                    <td style="border: none; font-weight: bold;">Opprettet av:</td>
+                    <td style="border: none; font-weight: bold;">{% trans 'Opprettet av:' %}</td>
                     <td style="border: none;">{{ oppdrag.opprettet_av.get_full_name|default:oppdrag.opprettet_av.username }}</td>
                 </tr>
                 <tr style="border: none;">
-                    <td style="border: none; font-weight: bold;">Opprettet:</td>
+                    <td style="border: none; font-weight: bold;">{% trans 'Opprettet:' %}</td>
                     <td style="border: none;">{{ oppdrag.opprettet|date:"d. M Y H:i" }}</td>
                 </tr>
                 <tr style="border: none;">
-                    <td style="border: none; font-weight: bold;">Påmeldte:</td>
-                    <td style="border: none;">{{ oppdrag.antall_pameldte }} frivillige</td>
+                    <td style="border: none; font-weight: bold;">{% trans 'Påmeldte:' %}</td>
+                    <td style="border: none;">{% blocktrans with count=oppdrag.antall_pameldte %}{{ count }} frivillige{% endblocktrans %}</td>
                 </tr>
             </table>
 
             <hr style="margin: 1rem 0; border: none; border-top: 1px solid #bdc3c7;">
 
-            <h3>Beskrivelse</h3>
+            <h3>{% trans 'Beskrivelse' %}</h3>
             <p>{{ oppdrag.beskrivelse }}</p>
 
             <hr style="margin: 1rem 0; border: none; border-top: 1px solid #bdc3c7;">
 
-            <h3>Påmeldte frivillige</h3>
+            <h3>{% trans 'Påmeldte frivillige' %}</h3>
             {% if oppdrag.pameldte.all %}
                 <ul>
                     {% for bruker in oppdrag.pameldte.all %}
@@ -59,7 +60,7 @@
                     {% endfor %}
                 </ul>
             {% else %}
-                <p class="text-muted">Ingen er påmeldt ennå.</p>
+                <p class="text-muted">{% trans 'Ingen er påmeldt ennå.' %}</p>
             {% endif %}
 
             <hr style="margin: 1rem 0; border: none; border-top: 1px solid #bdc3c7;">
@@ -68,33 +69,33 @@
             {% if user.is_authenticated %}
                 {% if user in oppdrag.pameldte.all %}
                     <div style="background-color: #d4edda; border: 1px solid #c3e6cb; padding: 1rem; border-radius: 4px; margin-bottom: 1rem;">
-                        ✓ Du er påmeldt dette oppdraget
+                        ✓ {% trans 'Du er påmeldt dette oppdraget' %}
                     </div>
                     <form method="post" action="{% url 'avmeld' oppdrag.pk %}" style="display: inline;">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-danger">Avmeld meg</button>
+                        <button type="submit" class="btn btn-danger">{% trans 'Avmeld meg' %}</button>
                     </form>
                 {% else %}
                     <form method="post" action="{% url 'pameld' oppdrag.pk %}" style="display: inline;">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-success">Meld deg på</button>
+                        <button type="submit" class="btn btn-success">{% trans 'Meld deg på' %}</button>
                     </form>
                 {% endif %}
             {% else %}
-                <p class="text-muted">Du må være logget inn for å melde deg på oppdrag.</p>
-                <a href="{% url 'login' %}" class="btn btn-primary">Logg inn</a>
+                <p class="text-muted">{% trans 'Du må være logget inn for å melde deg på oppdrag.' %}</p>
+                <a href="{% url 'login' %}" class="btn btn-primary">{% trans 'Logg inn' %}</a>
             {% endif %}
 
             <!-- Admin handlinger -->
             {% if user.is_staff %}
                 <div class="mt-1" style="border-top: 1px solid #bdc3c7; padding-top: 1rem;">
-                    <a href="{% url 'oppdrag_rediger' oppdrag.pk %}" class="btn btn-primary">Rediger</a>
-                    <a href="{% url 'oppdrag_slett' oppdrag.pk %}" class="btn btn-danger">Slett</a>
+                    <a href="{% url 'oppdrag_rediger' oppdrag.pk %}" class="btn btn-primary">{% trans 'Rediger' %}</a>
+                    <a href="{% url 'oppdrag_slett' oppdrag.pk %}" class="btn btn-danger">{% trans 'Slett' %}</a>
                 </div>
             {% endif %}
 
             <p class="mt-2">
-                <a href="{% url 'oppdrag_liste' %}" class="btn btn-secondary">Tilbake til liste</a>
+                <a href="{% url 'oppdrag_liste' %}" class="btn btn-secondary">{% trans 'Tilbake til liste' %}</a>
             </p>
         </div>
     </div>

@@ -1,0 +1,557 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: nabohjelpen\n"
+"POT-Creation-Date: 2026-04-13 00:00+0000\n"
+"PO-Revision-Date: 2026-04-13 00:00+0000\n"
+"Last-Translator: GitHub Copilot\n"
+"Language-Team: English\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Velg språk"
+msgstr "Choose language"
+
+msgid "Velg tema"
+msgstr "Choose theme"
+
+msgid "Lys tema"
+msgstr "Light theme"
+
+msgid "Morkt tema"
+msgstr "Dark theme"
+
+msgid "Svart tema"
+msgstr "Black theme"
+
+msgid "Oppdrag"
+msgstr "Tasks"
+
+msgid "Nyheter"
+msgstr "News"
+
+msgid "Kategorier"
+msgstr "Categories"
+
+msgid "Dashboard"
+msgstr "Dashboard"
+
+msgid "Profil"
+msgstr "Profile"
+
+msgid "Logg ut"
+msgstr "Log out"
+
+msgid "Logg inn"
+msgstr "Log in"
+
+msgid "Registrer deg"
+msgstr "Sign up"
+
+msgid "En plattform for frivillig innsats i lokalsamfunnet"
+msgstr "A platform for volunteer efforts in the local community"
+
+msgid "Velkommen til Nabohjelpen!"
+msgstr "Welcome to Nabohjelpen!"
+
+msgid "En plattform der naboer hjelper naboer"
+msgstr "A platform where neighbors help neighbors"
+
+msgid "Nabohjelpen er en frivillighetsplattform som knytter sammen folk i lokalsamfunnet."
+msgstr "Nabohjelpen is a volunteer platform that connects people in the local community."
+
+msgid "Her kan du melde deg på oppdrag du ønsker å hjelpe til med, eller be om hjelp fra andre frivillige."
+msgstr "Here you can sign up for tasks you want to help with, or ask other volunteers for help."
+
+msgid "Frivillige medlemmer"
+msgstr "Volunteer members"
+
+msgid "Åpne oppdrag"
+msgstr "Open tasks"
+
+msgid "Fullførte oppdrag"
+msgstr "Completed tasks"
+
+msgid "Nyeste nyheter"
+msgstr "Latest news"
+
+msgid "Nyeste oppdrag"
+msgstr "Latest tasks"
+
+msgid "Kategori:"
+msgstr "Category:"
+
+msgid "Sted:"
+msgstr "Location:"
+
+msgid "Status:"
+msgstr "Status:"
+
+msgid "Les mer"
+msgstr "Read more"
+
+msgid "Se alle oppdrag"
+msgstr "See all tasks"
+
+msgid "Ingen åpne oppdrag for øyeblikket"
+msgstr "No open tasks at the moment"
+
+msgid "Publisert:"
+msgstr "Published:"
+
+msgid "av"
+msgstr "by"
+
+msgid "Se alle nyheter"
+msgstr "See all news"
+
+msgid "Ingen nyheter enda"
+msgstr "No news yet"
+
+msgid "Ønsker du å bli frivillig?"
+msgstr "Do you want to become a volunteer?"
+
+msgid "Registrer deg nå og start med å hjelpe til i lokalsamfunnet ditt!"
+msgstr "Sign up now and start helping in your local community!"
+
+msgid "Bruker opprettet! Logg inn med dine detaljer."
+msgstr "User created! Log in with your details."
+
+msgid "Profil oppdatert!"
+msgstr "Profile updated!"
+
+msgid "Kontoen din er slettet."
+msgstr "Your account has been deleted."
+
+msgid "Oppdrag opprettet!"
+msgstr "Task created!"
+
+msgid "Oppdrag oppdatert!"
+msgstr "Task updated!"
+
+msgid "Oppdrag slettet!"
+msgstr "Task deleted!"
+
+msgid "Du er nå påmeldt \"%(title)s\"!"
+msgstr "You are now signed up for \"%(title)s\"!"
+
+msgid "Du er allerede påmeldt dette oppdraget."
+msgstr "You are already signed up for this task."
+
+msgid "Du er nå avmeldt \"%(title)s\"."
+msgstr "You are now unsubscribed from \"%(title)s\"."
+
+msgid "Nyhet publisert!"
+msgstr "News published!"
+
+msgid "Nyhet oppdatert!"
+msgstr "News updated!"
+
+msgid "Nyhet slettet!"
+msgstr "News deleted!"
+
+msgid "Kategori opprettet!"
+msgstr "Category created!"
+
+msgid "Kategori oppdatert!"
+msgstr "Category updated!"
+
+msgid "Kategori slettet!"
+msgstr "Category deleted!"
+
+msgid "Hei"
+msgstr "Hi"
+
+msgid "Min Profil"
+msgstr "My Profile"
+
+msgid "Navn:"
+msgstr "Name:"
+
+msgid "E-post:"
+msgstr "Email:"
+
+msgid "Telefon:"
+msgstr "Phone:"
+
+msgid "Ikke angitt"
+msgstr "Not specified"
+
+msgid "Se profil"
+msgstr "View profile"
+
+msgid "Rediger"
+msgstr "Edit"
+
+msgid "Min Aktivitet"
+msgstr "My Activity"
+
+msgid "Påmeldte oppdrag:"
+msgstr "Signed-up tasks:"
+
+msgid "Du er påmeldt %(count)s oppdrag"
+msgstr "You are signed up for %(count)s tasks"
+
+msgid "Mine oppdrag"
+msgstr "My tasks"
+
+msgid "Tittel"
+msgstr "Title"
+
+msgid "Kategori"
+msgstr "Category"
+
+msgid "Sted"
+msgstr "Location"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Handling"
+msgstr "Action"
+
+msgid "Åpen"
+msgstr "Open"
+
+msgid "Pågår"
+msgstr "In progress"
+
+msgid "Fullført"
+msgstr "Completed"
+
+msgid "Detaljer"
+msgstr "Details"
+
+msgid "Avmeld"
+msgstr "Unsubscribe"
+
+msgid "Du er ikke påmeldt noen oppdrag ennå"
+msgstr "You are not signed up for any tasks yet"
+
+msgid "Farlige handlinger"
+msgstr "Dangerous actions"
+
+msgid "Hvis du ønsker å slette kontoen din, kan du gjøre det her."
+msgstr "If you want to delete your account, you can do it here."
+
+msgid "Dette kan ikke angres!"
+msgstr "This cannot be undone!"
+
+msgid "Slett konto"
+msgstr "Delete account"
+
+msgid "Opprett Kategori"
+msgstr "Create Category"
+
+msgid "Opprett"
+msgstr "Create"
+
+msgid "Avbryt"
+msgstr "Cancel"
+
+msgid "Slett Kategori"
+msgstr "Delete Category"
+
+msgid "Du holder på å slette følgende kategori:"
+msgstr "You are about to delete the following category:"
+
+msgid "Ja, slett kategorien"
+msgstr "Yes, delete the category"
+
+msgid "Opprettet:"
+msgstr "Created:"
+
+msgid "Ingen beskrivelse"
+msgstr "No description"
+
+msgid "Tilknyttede oppdrag"
+msgstr "Related tasks"
+
+msgid "Ingen oppdrag er knyttet til denne kategorien."
+msgstr "No tasks are linked to this category."
+
+msgid "Tilbake til kategorier"
+msgstr "Back to categories"
+
+msgid "Slett"
+msgstr "Delete"
+
+msgid "Opprett kategori"
+msgstr "Create category"
+
+msgid "Søk i kategorier..."
+msgstr "Search in categories..."
+
+msgid "Søk"
+msgstr "Search"
+
+msgid "Navn"
+msgstr "Name"
+
+msgid "Beskrivelse"
+msgstr "Description"
+
+msgid "Opprettet"
+msgstr "Created"
+
+msgid "Første"
+msgstr "First"
+
+msgid "Forrige"
+msgstr "Previous"
+
+msgid "Side %(number)s av %(total)s"
+msgstr "Page %(number)s of %(total)s"
+
+msgid "Neste"
+msgstr "Next"
+
+msgid "Siste"
+msgstr "Last"
+
+msgid "Ingen kategorier opprettet enda"
+msgstr "No categories created yet"
+
+msgid "Rediger Kategori"
+msgstr "Edit Category"
+
+msgid "Lagre endringer"
+msgstr "Save changes"
+
+msgid "Ikke medlem ennå?"
+msgstr "Not a member yet?"
+
+msgid "Registrer deg her"
+msgstr "Sign up here"
+
+msgid "Registrering"
+msgstr "Registration"
+
+msgid "Allerede medlem?"
+msgstr "Already a member?"
+
+msgid "Logg inn her"
+msgstr "Log in here"
+
+msgid "Rediger Profil"
+msgstr "Edit Profile"
+
+msgid "F.eks.: handle, kjøre bil, teknisk hjelp"
+msgstr "E.g.: shopping, driving, technical help"
+
+msgid "Allergi, dyreallergi, andre viktige hensyn"
+msgstr "Allergy, pet allergy, other important considerations"
+
+msgid "F.eks.: Mandag-fredag ettermiddag, helger"
+msgstr "E.g.: Monday-Friday afternoons, weekends"
+
+msgid "Slett Konto"
+msgstr "Delete Account"
+
+msgid "Advarsel!"
+msgstr "Warning!"
+
+msgid "Hvis du sletter kontoen din, vil all data bli permanent slettet. Dette kan"
+msgstr "If you delete your account, all data will be permanently deleted. This cannot"
+
+msgid "ikke"
+msgstr "not"
+
+msgid "angres!"
+msgstr "be undone!"
+
+msgid "Du kommer til å slette følgende:"
+msgstr "You are about to delete the following:"
+
+msgid "Din profil"
+msgstr "Your profile"
+
+msgid "Din registrering på oppdrag"
+msgstr "Your task registrations"
+
+msgid "All informasjon knyttet til kontoen"
+msgstr "All information linked to the account"
+
+msgid "Skriv"
+msgstr "Type"
+
+msgid "for å bekrefte at du vil slette kontoen:"
+msgstr "to confirm that you want to delete the account:"
+
+msgid "Skriv JA"
+msgstr "Type YES"
+
+msgid "Ja, slett kontoen min permanent"
+msgstr "Yes, delete my account permanently"
+
+msgid "Opprett Oppdrag"
+msgstr "Create Task"
+
+msgid "Opprett Nytt Oppdrag"
+msgstr "Create New Task"
+
+msgid "Opprett oppdrag"
+msgstr "Create task"
+
+msgid "Slett Oppdrag"
+msgstr "Delete Task"
+
+msgid "Du holder på å slette følgende oppdrag:"
+msgstr "You are about to delete the following task:"
+
+msgid "Dette vil slette oppdraget og alt tilhørende data."
+msgstr "This will delete the task and all related data."
+
+msgid "Ja, slett oppdraget"
+msgstr "Yes, delete the task"
+
+msgid "Påmeldte:"
+msgstr "Signed up:"
+
+msgid "%(count)s frivillige"
+msgstr "%(count)s volunteers"
+
+msgid "Påmeldte frivillige"
+msgstr "Signed-up volunteers"
+
+msgid "Ingen er påmeldt ennå."
+msgstr "No one has signed up yet."
+
+msgid "Du er påmeldt dette oppdraget"
+msgstr "You are signed up for this task"
+
+msgid "Avmeld meg"
+msgstr "Unsubscribe me"
+
+msgid "Meld deg på"
+msgstr "Sign up"
+
+msgid "Du må være logget inn for å melde deg på oppdrag."
+msgstr "You must be logged in to sign up for tasks."
+
+msgid "Tilbake til liste"
+msgstr "Back to list"
+
+msgid "Opprett nytt oppdrag"
+msgstr "Create new task"
+
+msgid "Søk i oppdrag..."
+msgstr "Search tasks..."
+
+msgid "Alle kategorier"
+msgstr "All categories"
+
+msgid "Alle status"
+msgstr "All statuses"
+
+msgid "Påmeldte"
+msgstr "Signed up"
+
+msgid "Ingen oppdrag funnet. Prøv et annet søk eller filter."
+msgstr "No tasks found. Try another search or filter."
+
+msgid "Rediger Oppdrag"
+msgstr "Edit Task"
+
+msgid "Publiser nyhet"
+msgstr "Publish news"
+
+msgid "Søk i nyheter..."
+msgstr "Search news..."
+
+msgid "Les videre"
+msgstr "Read more"
+
+msgid "Tilbake til nyheter"
+msgstr "Back to news"
+
+msgid "Publiser Nyhet"
+msgstr "Publish News"
+
+msgid "Publiser"
+msgstr "Publish"
+
+msgid "Rediger Nyhet"
+msgstr "Edit News"
+
+msgid "Slett Nyhet"
+msgstr "Delete News"
+
+msgid "Du holder på å slette følgende nyhet:"
+msgstr "You are about to delete the following news post:"
+
+msgid "Ja, slett nyheten"
+msgstr "Yes, delete the news post"
+
+msgid "Brukernavn"
+msgstr "Username"
+
+msgid "Fornavn"
+msgstr "First name"
+
+msgid "Etternavn"
+msgstr "Last name"
+
+msgid "E-post"
+msgstr "Email"
+
+msgid "Telefonnummer"
+msgstr "Phone number"
+
+msgid "Passord"
+msgstr "Password"
+
+msgid "Bekreft passord"
+msgstr "Confirm password"
+
+msgid "Denne e-postadressen er allerede registrert."
+msgstr "This email address is already registered."
+
+msgid "Dette brukernavnet er allerede tatt."
+msgstr "This username is already taken."
+
+msgid "Hva kan du hjelpe til med?"
+msgstr "What can you help with?"
+
+msgid "Allergier eller spesielle hensyn"
+msgstr "Allergies or special considerations"
+
+msgid "Når er du tilgjengelig?"
+msgstr "When are you available?"
+
+msgid "Tittel på oppdraget"
+msgstr "Task title"
+
+msgid "Beskriv oppdraget"
+msgstr "Describe the task"
+
+msgid "Kategorinavn"
+msgstr "Category name"
+
+msgid "Innhold"
+msgstr "Content"
+
+msgid "Brukernavn:"
+msgstr "Username:"
+
+msgid "Medlem siden:"
+msgstr "Member since:"
+
+msgid "Kan hjelpe med"
+msgstr "Can help with"
+
+msgid "Allergier & hensyn"
+msgstr "Allergies & considerations"
+
+msgid "Tilgjengelighet"
+msgstr "Availability"
+
+msgid "Rediger profil"
+msgstr "Edit profile"
+
+msgid "Tilbake"
+msgstr "Back"
+
+msgid "Frivillig plattform"
+msgstr "Volunteer platform"

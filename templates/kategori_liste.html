@@ -1,21 +1,22 @@
 {% extends "base.html" %}
+{% load i18n %}
 
-{% block title %}Kategorier - Nabohjelpen{% endblock %}
+{% block title %}{% trans 'Kategorier' %} - Nabohjelpen{% endblock %}
 
 {% block content %}
-<h1>Kategorier 📂</h1>
+<h1>{% trans 'Kategorier' %} 📂</h1>
 
 <p>
-    <a href="{% url 'kategori_opprett' %}" class="btn btn-success">+ Opprett kategori</a>
+    <a href="{% url 'kategori_opprett' %}" class="btn btn-success">+ {% trans 'Opprett kategori' %}</a>
 </p>
 
 <div class="card mb-2">
     <div class="card-body">
         <form method="get" style="display: flex; gap: 1rem; flex-wrap: wrap;">
             <div style="flex: 1; min-width: 200px;">
-                <input type="text" name="search" placeholder="Søk i kategorier..." value="{{ search_query }}" class="form-control">
+                <input type="text" name="search" placeholder="{% trans 'Søk i kategorier...' %}" value="{{ search_query }}" class="form-control">
             </div>
-            <button type="submit" class="btn btn-primary">Søk</button>
+            <button type="submit" class="btn btn-primary">{% trans 'Søk' %}</button>
         </form>
     </div>
 </div>
@@ -24,10 +25,10 @@
     <table>
         <thead>
             <tr>
-                <th>Navn</th>
-                <th>Beskrivelse</th>
-                <th>Opprettet</th>
-                <th>Handling</th>
+                <th>{% trans 'Navn' %}</th>
+                <th>{% trans 'Beskrivelse' %}</th>
+                <th>{% trans 'Opprettet' %}</th>
+                <th>{% trans 'Handling' %}</th>
             </tr>
         </thead>
         <tbody>
@@ -37,9 +38,9 @@
                     <td>{{ kategori.beskrivelse|truncatewords:15 }}</td>
                     <td>{{ kategori.opprettet|date:"d. M Y" }}</td>
                     <td>
-                        <a href="{% url 'kategori_detalj' kategori.pk %}" class="btn btn-primary btn-small">Detaljer</a>
-                        <a href="{% url 'kategori_rediger' kategori.pk %}" class="btn btn-primary btn-small">Rediger</a>
-                        <a href="{% url 'kategori_slett' kategori.pk %}" class="btn btn-danger btn-small">Slett</a>
+                        <a href="{% url 'kategori_detalj' kategori.pk %}" class="btn btn-primary btn-small">{% trans 'Detaljer' %}</a>
+                        <a href="{% url 'kategori_rediger' kategori.pk %}" class="btn btn-primary btn-small">{% trans 'Rediger' %}</a>
+                        <a href="{% url 'kategori_slett' kategori.pk %}" class="btn btn-danger btn-small">{% trans 'Slett' %}</a>
                     </td>
                 </tr>
             {% endfor %}
@@ -50,23 +51,23 @@
         <div class="pagination">
             {% if page_obj.has_previous %}
                 {% if querystring %}
-                    <a href="?{{ querystring }}&page=1">« Første</a>
-                    <a href="?{{ querystring }}&page={{ page_obj.previous_page_number }}">‹ Forrige</a>
+                    <a href="?{{ querystring }}&page=1">« {% trans 'Første' %}</a>
+                    <a href="?{{ querystring }}&page={{ page_obj.previous_page_number }}">‹ {% trans 'Forrige' %}</a>
                 {% else %}
-                    <a href="?page=1">« Første</a>
-                    <a href="?page={{ page_obj.previous_page_number }}">‹ Forrige</a>
+                    <a href="?page=1">« {% trans 'Første' %}</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">‹ {% trans 'Forrige' %}</a>
                 {% endif %}
             {% endif %}
 
-            <span>Side {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}</span>
+            <span>{% blocktrans with number=page_obj.number total=page_obj.paginator.num_pages %}Side {{ number }} av {{ total }}{% endblocktrans %}</span>
 
             {% if page_obj.has_next %}
                 {% if querystring %}
-                    <a href="?{{ querystring }}&page={{ page_obj.next_page_number }}">Neste ›</a>
-                    <a href="?{{ querystring }}&page={{ page_obj.paginator.num_pages }}">Siste »</a>
+                    <a href="?{{ querystring }}&page={{ page_obj.next_page_number }}">{% trans 'Neste' %} ›</a>
+                    <a href="?{{ querystring }}&page={{ page_obj.paginator.num_pages }}">{% trans 'Siste' %} »</a>
                 {% else %}
-                    <a href="?page={{ page_obj.next_page_number }}">Neste ›</a>
-                    <a href="?page={{ page_obj.paginator.num_pages }}">Siste »</a>
+                    <a href="?page={{ page_obj.next_page_number }}">{% trans 'Neste' %} ›</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">{% trans 'Siste' %} »</a>
                 {% endif %}
             {% endif %}
         </div>
@@ -74,7 +75,7 @@
 {% else %}
     <div class="card">
         <div class="card-body text-center">
-            <p class="text-muted">Ingen kategorier opprettet enda</p>
+            <p class="text-muted">{% trans 'Ingen kategorier opprettet enda' %}</p>
         </div>
     </div>
 {% endif %}

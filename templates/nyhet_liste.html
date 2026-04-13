@@ -1,14 +1,15 @@
 {% extends "base.html" %}
+{% load i18n %}
 
-{% block title %}Nyheter - Nabohjelpen{% endblock %}
+{% block title %}{% trans 'Nyheter' %} - Nabohjelpen{% endblock %}
 
 {% block content %}
-<h1>Nyheter 📰</h1>
+<h1>{% trans 'Nyheter' %} 📰</h1>
 
 <!-- Administrasjon -->
 {% if user.is_staff %}
     <p>
-        <a href="{% url 'nyhet_opprett' %}" class="btn btn-success">+ Publiser nyhet</a>
+        <a href="{% url 'nyhet_opprett' %}" class="btn btn-success">+ {% trans 'Publiser nyhet' %}</a>
     </p>
 {% endif %}
 
@@ -17,9 +18,9 @@
     <div class="card-body">
         <form method="get" style="display: flex; gap: 1rem; flex-wrap: wrap;">
             <div style="flex: 1; min-width: 200px;">
-                <input type="text" name="search" placeholder="Søk i nyheter..." value="{{ search_query }}" class="form-control">
+                <input type="text" name="search" placeholder="{% trans 'Søk i nyheter...' %}" value="{{ search_query }}" class="form-control">
             </div>
-            <button type="submit" class="btn btn-primary">Søk</button>
+            <button type="submit" class="btn btn-primary">{% trans 'Søk' %}</button>
         </form>
     </div>
 </div>
@@ -35,15 +36,15 @@
                 <div class="card-body">
                     <p class="text-muted">
                         <small>
-                            Publisert: {{ nyhet.publisert_dato|date:"d. M Y H:i" }}
-                            av {{ nyhet.opprettet_av.get_full_name|default:nyhet.opprettet_av.username }}
+                            {% trans 'Publisert:' %} {{ nyhet.publisert_dato|date:"d. M Y H:i" }}
+                            {% trans 'av' %} {{ nyhet.opprettet_av.get_full_name|default:nyhet.opprettet_av.username }}
                         </small>
                     </p>
                     <p>{{ nyhet.innhold|truncatewords:30 }}</p>
                     <div>
-                        <a href="{% url 'nyhet_detalj' nyhet.pk %}" class="btn btn-primary btn-small">Les videre</a>
+                        <a href="{% url 'nyhet_detalj' nyhet.pk %}" class="btn btn-primary btn-small">{% trans 'Les videre' %}</a>
                         {% if user.is_staff %}
-                            <a href="{% url 'nyhet_rediger' nyhet.pk %}" class="btn btn-primary btn-small">Rediger</a>
+                            <a href="{% url 'nyhet_rediger' nyhet.pk %}" class="btn btn-primary btn-small">{% trans 'Rediger' %}</a>
                         {% endif %}
                     </div>
                 </div>
@@ -56,23 +57,23 @@
         <div class="pagination">
             {% if page_obj.has_previous %}
                 {% if querystring %}
-                    <a href="?{{ querystring }}&page=1">« Første</a>
-                    <a href="?{{ querystring }}&page={{ page_obj.previous_page_number }}">‹ Forrige</a>
+                    <a href="?{{ querystring }}&page=1">« {% trans 'Første' %}</a>
+                    <a href="?{{ querystring }}&page={{ page_obj.previous_page_number }}">‹ {% trans 'Forrige' %}</a>
                 {% else %}
-                    <a href="?page=1">« Første</a>
-                    <a href="?page={{ page_obj.previous_page_number }}">‹ Forrige</a>
+                    <a href="?page=1">« {% trans 'Første' %}</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">‹ {% trans 'Forrige' %}</a>
                 {% endif %}
             {% endif %}
 
-            <span>Side {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}</span>
+            <span>{% blocktrans with number=page_obj.number total=page_obj.paginator.num_pages %}Side {{ number }} av {{ total }}{% endblocktrans %}</span>
 
             {% if page_obj.has_next %}
                 {% if querystring %}
-                    <a href="?{{ querystring }}&page={{ page_obj.next_page_number }}">Neste ›</a>
-                    <a href="?{{ querystring }}&page={{ page_obj.paginator.num_pages }}">Siste »</a>
+                    <a href="?{{ querystring }}&page={{ page_obj.next_page_number }}">{% trans 'Neste' %} ›</a>
+                    <a href="?{{ querystring }}&page={{ page_obj.paginator.num_pages }}">{% trans 'Siste' %} »</a>
                 {% else %}
-                    <a href="?page={{ page_obj.next_page_number }}">Neste ›</a>
-                    <a href="?page={{ page_obj.paginator.num_pages }}">Siste »</a>
+                    <a href="?page={{ page_obj.next_page_number }}">{% trans 'Neste' %} ›</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">{% trans 'Siste' %} »</a>
                 {% endif %}
             {% endif %}
         </div>
@@ -80,7 +81,7 @@
 {% else %}
     <div class="card">
         <div class="card-body text-center">
-            <p class="text-muted">Ingen nyheter enda</p>
+            <p class="text-muted">{% trans 'Ingen nyheter enda' %}</p>
         </div>
     </div>
 {% endif %}
