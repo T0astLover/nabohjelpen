@@ -125,7 +125,7 @@ class OppdragListView(ListView):
     model = Oppdrag
     template_name = 'oppdrag_liste.html'
     context_object_name = 'oppdrag'
-    paginate_by = 10
+    paginate_by = 5
 
     def get_queryset(self):
         qs = Oppdrag.objects.select_related('kategori', 'opprettet_av').all().order_by('-opprettet')
@@ -250,7 +250,7 @@ class NyhetListView(ListView):
     model = Nyhet
     template_name = 'nyhet_liste.html'
     context_object_name = 'nyheter'
-    paginate_by = 10
+    paginate_by = 5
 
     def get_queryset(self):
         qs = Nyhet.objects.select_related('opprettet_av').all().order_by('-publisert_dato')
@@ -334,7 +334,7 @@ class KategoriListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = Kategori
     template_name = 'kategori_liste.html'
     context_object_name = 'kategorier'
-    paginate_by = 10
+    paginate_by = 5
     login_url = 'login'
 
     def get_queryset(self):
