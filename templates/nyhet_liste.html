@@ -12,6 +12,18 @@
     </p>
 {% endif %}
 
+<!-- Søk -->
+<div class="card mb-2">
+    <div class="card-body">
+        <form method="get" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 200px;">
+                <input type="text" name="search" placeholder="Søk i nyheter..." value="{{ search_query }}" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary">Søk</button>
+        </form>
+    </div>
+</div>
+
 <!-- Liste over nyheter -->
 {% if nyheter %}
     <div class="grid">
@@ -43,15 +55,25 @@
     {% if is_paginated %}
         <div class="pagination">
             {% if page_obj.has_previous %}
-                <a href="?page=1">« Første</a>
-                <a href="?page={{ page_obj.previous_page_number }}">‹ Forrige</a>
+                {% if querystring %}
+                    <a href="?{{ querystring }}&page=1">« Første</a>
+                    <a href="?{{ querystring }}&page={{ page_obj.previous_page_number }}">‹ Forrige</a>
+                {% else %}
+                    <a href="?page=1">« Første</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">‹ Forrige</a>
+                {% endif %}
             {% endif %}
 
             <span>Side {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}</span>
 
             {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}">Neste ›</a>
-                <a href="?page={{ page_obj.paginator.num_pages }}">Siste »</a>
+                {% if querystring %}
+                    <a href="?{{ querystring }}&page={{ page_obj.next_page_number }}">Neste ›</a>
+                    <a href="?{{ querystring }}&page={{ page_obj.paginator.num_pages }}">Siste »</a>
+                {% else %}
+                    <a href="?page={{ page_obj.next_page_number }}">Neste ›</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">Siste »</a>
+                {% endif %}
             {% endif %}
         </div>
     {% endif %}

@@ -51,6 +51,19 @@
 
             <hr style="margin: 1rem 0; border: none; border-top: 1px solid #bdc3c7;">
 
+            <h3>Påmeldte frivillige</h3>
+            {% if oppdrag.pameldte.all %}
+                <ul>
+                    {% for bruker in oppdrag.pameldte.all %}
+                        <li>{{ bruker.get_full_name|default:bruker.username }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted">Ingen er påmeldt ennå.</p>
+            {% endif %}
+
+            <hr style="margin: 1rem 0; border: none; border-top: 1px solid #bdc3c7;">
+
             <!-- Påmeldinger -->
             {% if user.is_authenticated %}
                 {% if user in oppdrag.pameldte.all %}

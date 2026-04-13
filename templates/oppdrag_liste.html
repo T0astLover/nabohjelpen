@@ -91,15 +91,25 @@
     {% if is_paginated %}
         <div class="pagination">
             {% if page_obj.has_previous %}
-                <a href="?page=1&{{ request.GET.urlencode }}">« Første</a>
-                <a href="?page={{ page_obj.previous_page_number }}&{{ request.GET.urlencode }}">‹ Forrige</a>
+                {% if querystring %}
+                    <a href="?{{ querystring }}&page=1">« Første</a>
+                    <a href="?{{ querystring }}&page={{ page_obj.previous_page_number }}">‹ Forrige</a>
+                {% else %}
+                    <a href="?page=1">« Første</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">‹ Forrige</a>
+                {% endif %}
             {% endif %}
 
             <span>Side {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}</span>
 
             {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}&{{ request.GET.urlencode }}">Neste ›</a>
-                <a href="?page={{ page_obj.paginator.num_pages }}&{{ request.GET.urlencode }}">Siste »</a>
+                {% if querystring %}
+                    <a href="?{{ querystring }}&page={{ page_obj.next_page_number }}">Neste ›</a>
+                    <a href="?{{ querystring }}&page={{ page_obj.paginator.num_pages }}">Siste »</a>
+                {% else %}
+                    <a href="?page={{ page_obj.next_page_number }}">Neste ›</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">Siste »</a>
+                {% endif %}
             {% endif %}
         </div>
     {% endif %}

@@ -128,7 +128,7 @@ class OppdragListView(ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        qs = Oppdrag.objects.all().order_by('-opprettet')
+        qs = Oppdrag.objects.select_related('kategori', 'opprettet_av').all().order_by('-opprettet')
         
         # Filter på status
         status = self.request.GET.get('status', '')
@@ -153,6 +153,9 @@ class OppdragListView(ListView):
         context = super().get_context_data(**kwargs)
         context['kategorier'] = Kategori.objects.all()
         context['status_choices'] = Oppdrag.STATUS_CHOICES
+        query_params = self.request.GET.copy()
+        query_params.pop('page', None)
+        context['querystring'] = query_params.urlencode()
         return context
 
 
@@ -161,6 +164,9 @@ class OppdragDetailView(DetailView):
     model = Oppdrag
     template_name = 'oppdrag_detalj.html'
     context_object_name = 'oppdrag'
+
+    def get_queryset(self):
+        return Oppdrag.objects.select_related('kategori', 'opprettet_av').prefetch_related('pameldte')
 
 
 class OppdragCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
@@ -245,7 +251,25 @@ class NyhetListView(ListView):
     template_name = 'nyhet_liste.html'
     context_object_name = 'nyheter'
     paginate_by = 10
-    ordering = '-publisert_dato'
+
+    def get_queryset(self):
+        qs = Nyhet.objects.select_related('opprettet_av').all().order_by('-publisert_dato')
+
+        search = self.request.GET.get('search', '')
+        if search:
+            qs = qs.filter(
+                Q(tittel__icontains=search) | Q(innhold__icontains=search)
+            )
+
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        query_params = self.request.GET.copy()
+        query_params.pop('page', None)
+        context['querystring'] = query_params.urlencode()
+        context['search_query'] = self.request.GET.get('search', '')
+        return context
 
 
 class NyhetDetailView(DetailView):
@@ -310,10 +334,44 @@ class KategoriListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = Kategori
     template_name = 'kategori_liste.html'
     context_object_name = 'kategorier'
+    paginate_by = 10
+    login_url = 'login'
+
+    def get_queryset(self):
+        qs = Kategori.objects.all().order_by('navn')
+
+        search = self.request.GET.get('search', '')
+        if search:
+            qs = qs.filter(
+                Q(navn__icontains=search) | Q(beskrivelse__icontains=search)
+            )
+
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        query_params = self.request.GET.copy()
+        query_params.pop('page', None)
+        context['querystring'] = query_params.urlencode()
+        context['search_query'] = self.request.GET.get('search', '')
+        return context
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+
+class KategoriDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
+    """Detalj om kategori"""
+    model = Kategori
+    template_name = 'kategori_detalj.html'
+    context_object_name = 'kategori'
     login_url = 'login'
 
     def test_func(self):
         return self.request.user.is_staff
+
+    def get_queryset(self):
+        return Kategori.objects.prefetch_related('oppdrag__opprettet_av')
 
 
 class KategoriCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
