@@ -125,7 +125,7 @@ nabohjelpen/
 
 ### 1. Klone eller åpne prosjektet
 ```bash
-cd c:\Users\nikol\Downloads\nabohjelpen
+cd c:\Users\bruker\Downloads\nabohjelpen
 ```
 
 ### 2. Opprett virtual environment (hvis ikke allerede gjort)
