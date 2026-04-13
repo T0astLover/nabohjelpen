@@ -1,51 +1,52 @@
 {% extends "base.html" %}
+{% load i18n %}
 
-{% block title %}Min Profil - Nabohjelpen{% endblock %}
+{% block title %}{% trans 'Min Profil' %} - Nabohjelpen{% endblock %}
 
 {% block content %}
 <div style="max-width: 600px; margin: 0 auto;">
     <div class="card">
         <div class="card-header">
-            <h2 class="card-title">Min Profil</h2>
+            <h2 class="card-title">{% trans 'Min Profil' %}</h2>
         </div>
         <div class="card-body">
             <table style="width: 100%; border: none;">
                 <tr style="border: none;">
-                    <td style="border: none; font-weight: bold; width: 150px;">Navn:</td>
+                    <td style="border: none; font-weight: bold; width: 150px;">{% trans 'Navn:' %}</td>
                     <td style="border: none;">{{ profil.user.get_full_name }}</td>
                 </tr>
                 <tr style="border: none;">
-                    <td style="border: none; font-weight: bold;">Brukernavn:</td>
+                    <td style="border: none; font-weight: bold;">{% trans 'Brukernavn:' %}</td>
                     <td style="border: none;">{{ profil.user.username }}</td>
                 </tr>
                 <tr style="border: none;">
-                    <td style="border: none; font-weight: bold;">E-post:</td>
+                    <td style="border: none; font-weight: bold;">{% trans 'E-post:' %}</td>
                     <td style="border: none;">{{ profil.user.email }}</td>
                 </tr>
                 <tr style="border: none;">
-                    <td style="border: none; font-weight: bold;">Telefon:</td>
-                    <td style="border: none;">{{ profil.telefon|default:"Ikke angitt" }}</td>
+                    <td style="border: none; font-weight: bold;">{% trans 'Telefon:' %}</td>
+                    <td style="border: none;">{% if profil.telefon %}{{ profil.telefon }}{% else %}{% trans 'Ikke angitt' %}{% endif %}</td>
                 </tr>
                 <tr style="border: none;">
-                    <td style="border: none; font-weight: bold;">Medlem siden:</td>
+                    <td style="border: none; font-weight: bold;">{% trans 'Medlem siden:' %}</td>
                     <td style="border: none;">{{ profil.opprettet|date:"d. M Y" }}</td>
                 </tr>
             </table>
 
             <hr style="margin: 1rem 0; border: none; border-top: 1px solid #bdc3c7;">
 
-            <h3>Kan hjelpe med</h3>
-            <p>{{ profil.kan_hjelpe_med|default:"Ikke angitt" }}</p>
+            <h3>{% trans 'Kan hjelpe med' %}</h3>
+            <p>{% if profil.kan_hjelpe_med %}{{ profil.kan_hjelpe_med }}{% else %}{% trans 'Ikke angitt' %}{% endif %}</p>
 
-            <h3>Allergier & hensyn</h3>
-            <p>{{ profil.allergier_hensyn|default:"Ikke angitt" }}</p>
+            <h3>{% trans 'Allergier & hensyn' %}</h3>
+            <p>{% if profil.allergier_hensyn %}{{ profil.allergier_hensyn }}{% else %}{% trans 'Ikke angitt' %}{% endif %}</p>
 
-            <h3>Tilgjengelighet</h3>
-            <p>{{ profil.tilgjengelighet|default:"Ikke angitt" }}</p>
+            <h3>{% trans 'Tilgjengelighet' %}</h3>
+            <p>{% if profil.tilgjengelighet %}{{ profil.tilgjengelighet }}{% else %}{% trans 'Ikke angitt' %}{% endif %}</p>
 
             <div class="mt-2">
-                <a href="{% url 'profil_rediger' %}" class="btn btn-primary">Rediger profil</a>
-                <a href="{% url 'dashboard' %}" class="btn btn-secondary">Tilbake</a>
+                <a href="{% url 'profil_rediger' %}" class="btn btn-primary">{% trans 'Rediger profil' %}</a>
+                <a href="{% url 'dashboard' %}" class="btn btn-secondary">{% trans 'Tilbake' %}</a>
             </div>
         </div>
     </div>

@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import URLValidator
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 
 class Kategori(models.Model):
@@ -11,7 +12,7 @@ class Kategori(models.Model):
     opprettet = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name_plural = "Kategorier"
+        verbose_name_plural = _("Kategorier")
         ordering = ['navn']
 
     def __str__(self):
@@ -24,20 +25,20 @@ class Profil(models.Model):
     telefon = models.CharField(max_length=20, blank=True)
     kan_hjelpe_med = models.TextField(
         blank=True,
-        help_text="Hva kan du hjelpe til med?"
+        help_text=_("Hva kan du hjelpe til med?")
     )
     allergier_hensyn = models.TextField(
         blank=True,
-        help_text="Allergier eller spesielle hensyn"
+        help_text=_("Allergier eller spesielle hensyn")
     )
     tilgjengelighet = models.TextField(
         blank=True,
-        help_text="Når er du tilgjengelig?"
+        help_text=_("Når er du tilgjengelig?")
     )
     opprettet = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name_plural = "Profiler"
+        verbose_name_plural = _("Profiler")
         ordering = ['-opprettet']
 
     def __str__(self):
@@ -48,9 +49,9 @@ class Oppdrag(models.Model):
     """Oppdrag/aktivitet som frivillige kan melde seg på"""
     
     STATUS_CHOICES = (
-        ('aapen', 'Åpen'),
-        ('paagaar', 'Pågår'),
-        ('fullfort', 'Fullført'),
+        ('aapen', _('Åpen')),
+        ('paagaar', _('Pågår')),
+        ('fullfort', _('Fullført')),
     )
 
     tittel = models.CharField(max_length=200)
@@ -63,7 +64,7 @@ class Oppdrag(models.Model):
     pameldte = models.ManyToManyField(User, related_name='pameldte_oppdrag', blank=True)
 
     class Meta:
-        verbose_name_plural = "Oppdrag"
+        verbose_name_plural = _("Oppdrag")
         ordering = ['-opprettet']
 
     def __str__(self):
@@ -81,7 +82,7 @@ class Nyhet(models.Model):
     publisert_dato = models.DateTimeField(default=timezone.now)
 
     class Meta:
-        verbose_name_plural = "Nyheter"
+        verbose_name_plural = _("Nyheter")
         ordering = ['-publisert_dato']
 
     def __str__(self):

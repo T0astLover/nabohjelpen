@@ -1,10 +1,68 @@
 <!DOCTYPE html>
-<html lang="nb">
+<html lang="{{ request.LANGUAGE_CODE|default:'nb' }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load i18n %}
     <title>{% block title %}Nabohjelpen{% endblock %}</title>
     <style>
+        :root {
+            --bg-page: #f5f5f5;
+            --text-primary: #333;
+            --text-muted: #7f8c8d;
+            --text-heading: #2c3e50;
+            --surface: #ffffff;
+            --surface-alt: #ecf0f1;
+            --border: #bdc3c7;
+            --navbar-bg: #2c3e50;
+            --navbar-text: #ffffff;
+            --link-accent: #3498db;
+            --link-accent-hover: #2980b9;
+            --table-header-bg: #34495e;
+            --table-row-hover: #ecf0f1;
+            --footer-bg: #2c3e50;
+            --footer-text: #ffffff;
+            --shadow: rgba(0,0,0,0.1);
+        }
+
+        body.theme-dark {
+            --bg-page: #1d2430;
+            --text-primary: #e6edf5;
+            --text-muted: #b7c0cb;
+            --text-heading: #eaf1f8;
+            --surface: #273142;
+            --surface-alt: #344256;
+            --border: #4a5a70;
+            --navbar-bg: #121821;
+            --navbar-text: #eaf1f8;
+            --link-accent: #5fb3ff;
+            --link-accent-hover: #87c8ff;
+            --table-header-bg: #3a4a60;
+            --table-row-hover: #344256;
+            --footer-bg: #121821;
+            --footer-text: #eaf1f8;
+            --shadow: rgba(0,0,0,0.35);
+        }
+
+        body.theme-black {
+            --bg-page: #000000;
+            --text-primary: #efefef;
+            --text-muted: #b8b8b8;
+            --text-heading: #ffffff;
+            --surface: #101010;
+            --surface-alt: #1a1a1a;
+            --border: #2b2b2b;
+            --navbar-bg: #000000;
+            --navbar-text: #ffffff;
+            --link-accent: #6ab4ff;
+            --link-accent-hover: #97cbff;
+            --table-header-bg: #1e1e1e;
+            --table-row-hover: #171717;
+            --footer-bg: #000000;
+            --footer-text: #ffffff;
+            --shadow: rgba(0,0,0,0.6);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,15 +71,15 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f5f5f5;
-            color: #333;
+            background-color: var(--bg-page);
+            color: var(--text-primary);
         }
 
         /* Navbar */
         nav {
-            background-color: #2c3e50;
+            background-color: var(--navbar-bg);
             padding: 1rem 0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px var(--shadow);
             margin-bottom: 2rem;
         }
 
@@ -40,14 +98,14 @@
         }
 
         nav a {
-            color: white;
+            color: var(--navbar-text);
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s;
         }
 
         nav a:hover {
-            color: #3498db;
+            color: var(--link-accent);
         }
 
         .logout-form {
@@ -58,7 +116,7 @@
         .logout-form button {
             background: none;
             border: none;
-            color: white;
+            color: var(--navbar-text);
             cursor: pointer;
             font-weight: 500;
             transition: color 0.3s;
@@ -66,18 +124,46 @@
         }
 
         .logout-form button:hover {
-            color: #3498db;
+            color: var(--link-accent);
         }
 
         .nav-brand {
             font-size: 1.5rem;
             font-weight: bold;
-            color: #3498db;
+            color: var(--link-accent);
         }
 
         .nav-right {
             display: flex;
             gap: 1rem;
+        }
+
+        .theme-select {
+            width: auto;
+            min-width: 130px;
+            padding: 0.3rem 0.5rem;
+            margin: 0;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background-color: var(--surface);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+        .language-form {
+            margin: 0;
+        }
+
+        .language-select {
+            width: auto;
+            min-width: 95px;
+            padding: 0.3rem 0.5rem;
+            margin: 0;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background-color: var(--surface);
+            color: var(--text-primary);
+            font-size: 0.9rem;
         }
 
         /* Container */
@@ -127,7 +213,7 @@
         .btn {
             display: inline-block;
             padding: 0.5rem 1rem;
-            background-color: #3498db;
+            background-color: var(--link-accent);
             color: white;
             text-decoration: none;
             border-radius: 4px;
@@ -140,15 +226,15 @@
         }
 
         .btn:hover {
-            background-color: #2980b9;
+            background-color: var(--link-accent-hover);
         }
 
         .btn-primary {
-            background-color: #3498db;
+            background-color: var(--link-accent);
         }
 
         .btn-primary:hover {
-            background-color: #2980b9;
+            background-color: var(--link-accent-hover);
         }
 
         .btn-success {
@@ -200,10 +286,12 @@
         textarea {
             width: 100%;
             padding: 0.5rem;
-            border: 1px solid #bdc3c7;
+            border: 1px solid var(--border);
             border-radius: 4px;
             font-size: 1rem;
             font-family: inherit;
+            background-color: var(--surface);
+            color: var(--text-primary);
         }
 
         textarea {
@@ -219,7 +307,7 @@
         select:focus,
         textarea:focus {
             outline: none;
-            border-color: #3498db;
+            border-color: var(--link-accent);
             box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
         }
 
@@ -237,48 +325,48 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            background-color: white;
+            background-color: var(--surface);
             margin: 1rem 0;
         }
 
         th, td {
             padding: 0.75rem;
             text-align: left;
-            border-bottom: 1px solid #bdc3c7;
+            border-bottom: 1px solid var(--border);
         }
 
         th {
-            background-color: #34495e;
-            color: white;
+            background-color: var(--table-header-bg);
+            color: var(--navbar-text);
             font-weight: 600;
         }
 
         tr:hover {
-            background-color: #ecf0f1;
+            background-color: var(--table-row-hover);
         }
 
         /* Cards */
         .card {
-            background-color: white;
-            border: 1px solid #bdc3c7;
+            background-color: var(--surface);
+            border: 1px solid var(--border);
             border-radius: 4px;
             padding: 1rem;
             margin-bottom: 1rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            box-shadow: 0 1px 3px var(--shadow);
         }
 
         .card-header {
-            background-color: #ecf0f1;
+            background-color: var(--surface-alt);
             padding: 0.75rem;
             margin: -1rem -1rem 1rem -1rem;
-            border-bottom: 1px solid #bdc3c7;
+            border-bottom: 1px solid var(--border);
         }
 
         .card-title {
             margin: 0;
             font-size: 1.25rem;
             font-weight: 600;
-            color: #2c3e50;
+            color: var(--text-heading);
         }
 
         .card-body {
@@ -304,26 +392,27 @@
         .pagination a,
         .pagination span {
             padding: 0.5rem 0.75rem;
-            border: 1px solid #bdc3c7;
+            border: 1px solid var(--border);
             border-radius: 4px;
             text-decoration: none;
-            color: #3498db;
+            color: var(--link-accent);
+            background-color: var(--surface);
         }
 
         .pagination a:hover {
-            background-color: #ecf0f1;
+            background-color: var(--surface-alt);
         }
 
         .pagination .page-numbers.current {
-            background-color: #3498db;
+            background-color: var(--link-accent);
             color: white;
-            border-color: #3498db;
+            border-color: var(--link-accent);
         }
 
         /* Footer */
         footer {
-            background-color: #2c3e50;
-            color: white;
+            background-color: var(--footer-bg);
+            color: var(--footer-text);
             text-align: center;
             padding: 2rem;
             margin-top: 3rem;
@@ -340,7 +429,7 @@
         .mt-2 { margin-top: 2rem; }
 
         h1, h2, h3, h4, h5, h6 {
-            color: #2c3e50;
+            color: var(--text-heading);
             margin-bottom: 1rem;
         }
 
@@ -350,7 +439,7 @@
         h4 { font-size: 1.25rem; }
 
         .text-muted {
-            color: #7f8c8d;
+            color: var(--text-muted);
         }
 
         .badge {
@@ -388,23 +477,40 @@
         <ul>
             <li><a href="{% url 'forsiden' %}" class="nav-brand">🏘️ Nabohjelpen</a></li>
             <li style="flex: 1;"></li>
-            <li><a href="{% url 'oppdrag_liste' %}">Oppdrag</a></li>
-            <li><a href="{% url 'nyhet_liste' %}">Nyheter</a></li>
+            <li>
+                <form action="{% url 'set_language' %}" method="post" class="language-form">
+                    {% csrf_token %}
+                    <input name="next" type="hidden" value="{{ request.get_full_path }}">
+                    <select name="language" class="language-select" aria-label="{% trans 'Velg språk' %}" onchange="this.form.submit()">
+                        <option value="nb" {% if request.LANGUAGE_CODE == 'nb' %}selected{% endif %}>Norsk</option>
+                        <option value="en" {% if request.LANGUAGE_CODE == 'en' %}selected{% endif %}>English</option>
+                    </select>
+                </form>
+            </li>
+            <li>
+                <select id="theme-select" class="theme-select" aria-label="{% trans 'Velg tema' %}">
+                    <option value="light">{% trans 'Lys tema' %}</option>
+                    <option value="dark">{% trans 'Morkt tema' %}</option>
+                    <option value="black">{% trans 'Svart tema' %}</option>
+                </select>
+            </li>
+            <li><a href="{% url 'oppdrag_liste' %}">{% trans 'Oppdrag' %}</a></li>
+            <li><a href="{% url 'nyhet_liste' %}">{% trans 'Nyheter' %}</a></li>
             {% if user.is_authenticated %}
                 {% if user.is_staff %}
-                    <li><a href="{% url 'kategori_liste' %}">Kategorier</a></li>
+                    <li><a href="{% url 'kategori_liste' %}">{% trans 'Kategorier' %}</a></li>
                 {% endif %}
-                <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
-                <li><a href="{% url 'profil_detalj' %}">Profil</a></li>
+                <li><a href="{% url 'dashboard' %}">{% trans 'Dashboard' %}</a></li>
+                <li><a href="{% url 'profil_detalj' %}">{% trans 'Profil' %}</a></li>
                 <li>
                     <form method="post" action="{% url 'logout' %}" class="logout-form">
                         {% csrf_token %}
-                        <button type="submit">Logg ut</button>
+                        <button type="submit">{% trans 'Logg ut' %}</button>
                     </form>
                 </li>
             {% else %}
-                <li class="nav-right"><a href="{% url 'login' %}" class="btn btn-primary btn-small">Logg inn</a></li>
-                <li><a href="{% url 'registrering' %}" class="btn btn-success btn-small">Registrer deg</a></li>
+                <li class="nav-right"><a href="{% url 'login' %}" class="btn btn-primary btn-small">{% trans 'Logg inn' %}</a></li>
+                <li><a href="{% url 'registrering' %}" class="btn btn-success btn-small">{% trans 'Registrer deg' %}</a></li>
             {% endif %}
         </ul>
     </nav>
@@ -428,7 +534,32 @@
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2024 Nabohjelpen - En plattform for frivillig innsats i lokalsamfunnet</p>
+        <p>&copy; 2026 Nabohjelpen - {% trans 'En plattform for frivillig innsats i lokalsamfunnet' %}</p>
     </footer>
+
+    <script>
+        (function () {
+            const themeSelect = document.getElementById('theme-select');
+            const storedTheme = localStorage.getItem('theme') || 'light';
+
+            function applyTheme(theme) {
+                document.body.classList.remove('theme-dark', 'theme-black');
+                if (theme === 'dark') {
+                    document.body.classList.add('theme-dark');
+                } else if (theme === 'black') {
+                    document.body.classList.add('theme-black');
+                }
+            }
+
+            applyTheme(storedTheme);
+            themeSelect.value = storedTheme;
+
+            themeSelect.addEventListener('change', function () {
+                const theme = themeSelect.value;
+                localStorage.setItem('theme', theme);
+                applyTheme(theme);
+            });
+        })();
+    </script>
 </body>
 </html>

@@ -1,47 +1,92 @@
 {% extends "base.html" %}
+{% load i18n %}
 
-{% block title %}Nabohjelpen - Frivillig plattform{% endblock %}
+{% block title %}Nabohjelpen - {% trans 'Frivillig plattform' %}{% endblock %}
 
 {% block content %}
+<style>
+    .stats-row {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0.75rem;
+        margin: 1rem 0;
+    }
+
+    .stats-row .card {
+        margin-bottom: 0;
+    }
+
+    .stats-row .card-body {
+        padding: 0.5rem 0.75rem;
+    }
+
+    .stats-row h3 {
+        font-size: 1.2rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .stats-row p {
+        margin: 0;
+        font-size: 0.9rem;
+    }
+
+    @media (max-width: 900px) {
+        .stats-row {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 540px) {
+        .stats-row {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
 <div class="card">
     <div class="card-body">
-        <h1 class="text-center">🏘️ Velkomment til Nabohjelpen!</h1>
-        <p class="text-center mb-2">En plattform der naboer hjelper naboer</p>
+        <h1 class="text-center">🏘️ {% trans 'Velkommen til Nabohjelpen!' %}</h1>
+        <p class="text-center mb-2">{% trans 'En plattform der naboer hjelper naboer' %}</p>
         
         <div class="text-center mb-2">
             <p style="font-size: 1.1rem; line-height: 1.8;">
-                Nabohjelpen er en frivillighetsplattform som knytter sammen folk i lokalsamfunnet.
-                Her kan du melde deg på oppdrag du ønsker å hjelpe til med, eller be om hjelp fra andre frivillige.
-            </p>
+                {% trans 'Nabohjelpen er en frivillighetsplattform som knytter sammen folk i lokalsamfunnet.' %}
+                {% trans 'Her kan du melde deg på oppdrag du ønsker å hjelpe til med, eller be om hjelp fra andre frivillige.' %}
         </div>
     </div>
 </div>
 
 <!-- Statistikk -->
-<div class="grid">
+<div class="stats-row">
     <div class="card">
         <div class="card-body text-center">
             <h3>👥 {{ antall_medlemmer }}</h3>
-            <p>Frivillige medlemmer</p>
+            <p>{% trans 'Frivillige medlemmer' %}</p>
         </div>
     </div>
     <div class="card">
         <div class="card-body text-center">
-            <h3>📋 {{ nyeste_oppdrag|length }}</h3>
-            <p>Åpne oppdrag</p>
+            <h3>📋 {{ aapne_oppdrag_count }}</h3>
+            <p>{% trans 'Åpne oppdrag' %}</p>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body text-center">
+            <h3>✅ {{ fullforte_oppdrag_count }}</h3>
+            <p>{% trans 'Fullførte oppdrag' %}</p>
         </div>
     </div>
     <div class="card">
         <div class="card-body text-center">
             <h3>📰 {{ nyeste_nyheter|length }}</h3>
-            <p>Nyeste nyheter</p>
+            <p>{% trans 'Nyeste nyheter' %}</p>
         </div>
     </div>
 </div>
 
 <!-- Nyeste oppdrag -->
 <div class="mt-2">
-    <h2>📋 Nyeste oppdrag</h2>
+    <h2>📋 {% trans 'Nyeste oppdrag' %}</h2>
     {% if nyeste_oppdrag %}
         <div class="grid">
             {% for oppdrag in nyeste_oppdrag %}
@@ -50,24 +95,24 @@
                         <h4 class="card-title">{{ oppdrag.tittel }}</h4>
                     </div>
                     <div class="card-body">
-                        <p><strong>Kategori:</strong> {{ oppdrag.kategori }}</p>
-                        <p><strong>Sted:</strong> {{ oppdrag.sted }}</p>
-                        <p><strong>Status:</strong> <span class="badge badge-info">{{ oppdrag.get_status_display }}</span></p>
+                        <p><strong>{% trans 'Kategori:' %}</strong> {{ oppdrag.kategori }}</p>
+                        <p><strong>{% trans 'Sted:' %}</strong> {{ oppdrag.sted }}</p>
+                        <p><strong>{% trans 'Status:' %}</strong> <span class="badge badge-info">{{ oppdrag.get_status_display }}</span></p>
                         <p class="text-muted">{{ oppdrag.beskrivelse|truncatewords:15 }}</p>
-                        <a href="{% url 'oppdrag_detalj' oppdrag.pk %}" class="btn btn-primary btn-small">Les mer</a>
+                        <a href="{% url 'oppdrag_detalj' oppdrag.pk %}" class="btn btn-primary btn-small">{% trans 'Les mer' %}</a>
                     </div>
                 </div>
             {% endfor %}
         </div>
-        <p class="text-center"><a href="{% url 'oppdrag_liste' %}" class="btn btn-primary">Se alle oppdrag</a></p>
+        <p class="text-center"><a href="{% url 'oppdrag_liste' %}" class="btn btn-primary">{% trans 'Se alle oppdrag' %}</a></p>
     {% else %}
-        <p class="text-center text-muted">Ingen åpne oppdrag for øyeblikket</p>
+        <p class="text-center text-muted">{% trans 'Ingen åpne oppdrag for øyeblikket' %}</p>
     {% endif %}
 </div>
 
 <!-- Nyeste nyheter -->
 <div class="mt-2">
-    <h2>📰 Nyeste nyheter</h2>
+    <h2>📰 {% trans 'Nyeste nyheter' %}</h2>
     {% if nyeste_nyheter %}
         <div class="grid">
             {% for nyhet in nyeste_nyheter %}
@@ -78,19 +123,19 @@
                     <div class="card-body">
                         <p class="text-muted">
                             <small>
-                                Publisert: {{ nyhet.publisert_dato|date:"d. M Y" }}
-                                av {{ nyhet.opprettet_av.get_full_name|default:nyhet.opprettet_av.username }}
+                                {% trans 'Publisert:' %} {{ nyhet.publisert_dato|date:"d. M Y" }}
+                                {% trans 'av' %} {{ nyhet.opprettet_av.get_full_name|default:nyhet.opprettet_av.username }}
                             </small>
                         </p>
                         <p>{{ nyhet.innhold|truncatewords:20 }}</p>
-                        <a href="{% url 'nyhet_detalj' nyhet.pk %}" class="btn btn-primary btn-small">Les mer</a>
+                        <a href="{% url 'nyhet_detalj' nyhet.pk %}" class="btn btn-primary btn-small">{% trans 'Les mer' %}</a>
                     </div>
                 </div>
             {% endfor %}
         </div>
-        <p class="text-center"><a href="{% url 'nyhet_liste' %}" class="btn btn-primary">Se alle nyheter</a></p>
+        <p class="text-center"><a href="{% url 'nyhet_liste' %}" class="btn btn-primary">{% trans 'Se alle nyheter' %}</a></p>
     {% else %}
-        <p class="text-center text-muted">Ingen nyheter enda</p>
+        <p class="text-center text-muted">{% trans 'Ingen nyheter enda' %}</p>
     {% endif %}
 </div>
 
@@ -98,10 +143,10 @@
 {% if not user.is_authenticated %}
     <div class="card mt-2">
         <div class="card-body text-center">
-            <h3>Ønsker du å bli frivillig?</h3>
-            <p>Registrer deg nå og start med å hjelpe til i lokalsamfunnet ditt!</p>
-            <a href="{% url 'registrering' %}" class="btn btn-success">Registrer deg</a>
-            <a href="{% url 'login' %}" class="btn btn-primary">Logg inn</a>
+            <h3>{% trans 'Ønsker du å bli frivillig?' %}</h3>
+            <p>{% trans 'Registrer deg nå og start med å hjelpe til i lokalsamfunnet ditt!' %}</p>
+            <a href="{% url 'registrering' %}" class="btn btn-success">{% trans 'Registrer deg' %}</a>
+            <a href="{% url 'login' %}" class="btn btn-primary">{% trans 'Logg inn' %}</a>
         </div>
     </div>
 {% endif %}

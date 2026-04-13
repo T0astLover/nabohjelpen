@@ -4,6 +4,9 @@ En komplett Django-applikasjon for en norsk frivillighetsplattform som kobler sa
 
 ## Teknologi
 
+- **ChatGPT Plus** hoved AI   
+- **inbygget Copilot** ansvar for visual studio code 
+- **Figma sin innbygget Ai/KI** planleging
 - **Django 6.0** - Web framework
 - **SQLite** - Database
 - **Python 3.10+** - Programming language
@@ -122,7 +125,7 @@ nabohjelpen/
 
 ### 1. Klone eller åpne prosjektet
 ```bash
-cd c:\Users\nikol\Downloads\nabohjelpen
+cd c:\Users\bruker\Downloads\nabohjelpen
 ```
 
 ### 2. Opprett virtual environment (hvis ikke allerede gjort)
@@ -288,7 +291,7 @@ For å kjøre i produksjon, husk å:
 
 ## Lisens
 
-Privat skoleprojekt - alle koder eieredd av skolen/eleven.
+Privat skoleprojekt - alle koder eieredd av eleven.
 
 ---
 

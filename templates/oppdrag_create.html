@@ -1,12 +1,13 @@
 {% extends "base.html" %}
+{% load i18n %}
 
-{% block title %}Opprett Oppdrag - Nabohjelpen{% endblock %}
+{% block title %}{% trans 'Opprett Oppdrag' %} - Nabohjelpen{% endblock %}
 
 {% block content %}
 <div style="max-width: 600px; margin: 0 auto;">
     <div class="card">
         <div class="card-header">
-            <h2 class="card-title">Opprett Nytt Oppdrag</h2>
+            <h2 class="card-title">{% trans 'Opprett Nytt Oppdrag' %}</h2>
         </div>
         <div class="card-body">
             <form method="post">
@@ -43,8 +44,8 @@
                 </div>
 
                 <div class="mt-2">
-                    <button type="submit" class="btn btn-success">Opprett oppdrag</button>
-                    <a href="{% url 'oppdrag_liste' %}" class="btn btn-secondary">Avbryt</a>
+                    <button type="submit" class="btn btn-success">{% trans 'Opprett oppdrag' %}</button>
+                    <a href="{% url 'oppdrag_liste' %}" class="btn btn-secondary">{% trans 'Avbryt' %}</a>
                 </div>
             </form>
         </div>

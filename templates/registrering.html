@@ -1,12 +1,13 @@
 {% extends "base.html" %}
+{% load i18n %}
 
-{% block title %}Registrering - Nabohjelpen{% endblock %}
+{% block title %}{% trans 'Registrering' %} - Nabohjelpen{% endblock %}
 
 {% block content %}
 <div style="max-width: 400px; margin: 0 auto;">
     <div class="card">
         <div class="card-header">
-            <h2 class="card-title text-center">Registrer deg</h2>
+            <h2 class="card-title text-center">{% trans 'Registrer deg' %}</h2>
         </div>
         <div class="card-body">
             <form method="post">
@@ -74,11 +75,11 @@
                     </div>
                 {% endif %}
 
-                <button type="submit" class="btn btn-success" style="width: 100%;">Registrer deg</button>
+                <button type="submit" class="btn btn-success" style="width: 100%;">{% trans 'Registrer deg' %}</button>
             </form>
 
             <p class="text-center mt-1">
-                Allerede medlem? <a href="{% url 'login' %}">Logg inn her</a>
+                {% trans 'Allerede medlem?' %} <a href="{% url 'login' %}">{% trans 'Logg inn her' %}</a>
             </p>
         </div>
     </div>
