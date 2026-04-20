@@ -108,6 +108,16 @@
             color: var(--link-accent);
         }
 
+        a:focus-visible,
+        button:focus-visible,
+        .btn:focus-visible,
+        select:focus-visible,
+        input:focus-visible,
+        textarea:focus-visible {
+            outline: 3px solid #f39c12;
+            outline-offset: 2px;
+        }
+
         .logout-form {
             display: inline;
             margin: 0;
@@ -229,6 +239,10 @@
             background-color: var(--link-accent-hover);
         }
 
+        .btn:focus-visible {
+            box-shadow: 0 0 0 3px rgba(243, 156, 18, 0.35);
+        }
+
         .btn-primary {
             background-color: var(--link-accent);
         }
@@ -318,7 +332,30 @@
         }
 
         .errorlist li {
-            padding: 0.25rem 0;
+            background-color: #fdecea;
+            border: 1px solid #f5c2c7;
+            border-radius: 4px;
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group.has-error input,
+        .form-group.has-error textarea,
+        .form-group.has-error select {
+            border-color: #e74c3c;
+            background-color: #fff8f8;
+        }
+
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
         }
 
         /* Tables */

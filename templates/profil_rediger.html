@@ -12,33 +12,20 @@
         <div class="card-body">
             <form method="post">
                 {% csrf_token %}
-                
-                <div class="form-group">
-                    <label>{{ form.telefon.label }}</label>
-                    {{ form.telefon }}
-                    {% if form.telefon.errors %}{{ form.telefon.errors }}{% endif %}
-                </div>
 
-                <div class="form-group">
-                    <label>{{ form.kan_hjelpe_med.label }}</label>
-                    {{ form.kan_hjelpe_med }}
-                    <small class="text-muted">{% trans 'F.eks.: handle, kjøre bil, teknisk hjelp' %}</small>
-                    {% if form.kan_hjelpe_med.errors %}{{ form.kan_hjelpe_med.errors }}{% endif %}
-                </div>
+                {% if form.non_field_errors %}
+                    <div class="form-group">
+                        <ul class="errorlist" role="alert" aria-live="polite">
+                            {% for error in form.non_field_errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
 
-                <div class="form-group">
-                    <label>{{ form.allergier_hensyn.label }}</label>
-                    {{ form.allergier_hensyn }}
-                    <small class="text-muted">{% trans 'Allergi, dyreallergi, andre viktige hensyn' %}</small>
-                    {% if form.allergier_hensyn.errors %}{{ form.allergier_hensyn.errors }}{% endif %}
-                </div>
-
-                <div class="form-group">
-                    <label>{{ form.tilgjengelighet.label }}</label>
-                    {{ form.tilgjengelighet }}
-                    <small class="text-muted">{% trans 'F.eks.: Mandag-fredag ettermiddag, helger' %}</small>
-                    {% if form.tilgjengelighet.errors %}{{ form.tilgjengelighet.errors }}{% endif %}
-                </div>
+                {% for field in form.visible_fields %}
+                    {% include "includes/form_field.html" with field=field %}
+                {% endfor %}
 
                 <div class="mt-2">
                     <button type="submit" class="btn btn-success">{% trans 'Lagre endringer' %}</button>
