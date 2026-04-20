@@ -9,6 +9,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.db.models import Q
+from django.utils.translation import gettext as _
 from .models import Oppdrag, Profil, Nyhet, Kategori
 from .forms import (
     RegistreringForm, ProfilForm, OppdragForm, NyhetForm, KategoriForm
@@ -24,6 +25,8 @@ class ForsidenView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['antall_medlemmer'] = User.objects.filter(is_staff=False).count()
+        context['aapne_oppdrag_count'] = Oppdrag.objects.filter(status='aapen').count()
+        context['fullforte_oppdrag_count'] = Oppdrag.objects.filter(status='fullfort').count()
         context['nyeste_oppdrag'] = Oppdrag.objects.filter(status='aapen')[:3]
         context['nyeste_nyheter'] = Nyhet.objects.all()[:3]
         return context
@@ -45,7 +48,7 @@ class RegistreringView(CreateView):
         user = self.object
         user.profil.telefon = telefon
         user.profil.save()
-        messages.success(self.request, 'Bruker opprettet! Logg inn med dine detaljer.')
+        messages.success(self.request, _('Bruker opprettet! Logg inn med dine detaljer.'))
         return response
 
 
@@ -99,7 +102,7 @@ class ProfilUpdateView(LoginRequiredMixin, UpdateView):
         return self.request.user.profil
 
     def form_valid(self, form):
-        messages.success(self.request, 'Profil oppdatert!')
+        messages.success(self.request, _('Profil oppdatert!'))
         return super().form_valid(form)
 
 
@@ -114,7 +117,7 @@ class SlettKontoView(LoginRequiredMixin, DeleteView):
         return self.request.user
 
     def delete(self, request, *args, **kwargs):
-        messages.success(request, 'Kontoen din er slettet.')
+        messages.success(request, _('Kontoen din er slettet.'))
         return super().delete(request, *args, **kwargs)
 
 
@@ -125,10 +128,10 @@ class OppdragListView(ListView):
     model = Oppdrag
     template_name = 'oppdrag_liste.html'
     context_object_name = 'oppdrag'
-    paginate_by = 10
+    paginate_by = 5
 
     def get_queryset(self):
-        qs = Oppdrag.objects.all().order_by('-opprettet')
+        qs = Oppdrag.objects.select_related('kategori', 'opprettet_av').all().order_by('-opprettet')
         
         # Filter på status
         status = self.request.GET.get('status', '')
@@ -153,6 +156,9 @@ class OppdragListView(ListView):
         context = super().get_context_data(**kwargs)
         context['kategorier'] = Kategori.objects.all()
         context['status_choices'] = Oppdrag.STATUS_CHOICES
+        query_params = self.request.GET.copy()
+        query_params.pop('page', None)
+        context['querystring'] = query_params.urlencode()
         return context
 
 
@@ -161,6 +167,9 @@ class OppdragDetailView(DetailView):
     model = Oppdrag
     template_name = 'oppdrag_detalj.html'
     context_object_name = 'oppdrag'
+
+    def get_queryset(self):
+        return Oppdrag.objects.select_related('kategori', 'opprettet_av').prefetch_related('pameldte')
 
 
 class OppdragCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
@@ -176,7 +185,7 @@ class OppdragCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.opprettet_av = self.request.user
-        messages.success(self.request, 'Oppdrag opprettet!')
+        messages.success(self.request, _('Oppdrag opprettet!'))
         return super().form_valid(form)
 
 
@@ -192,7 +201,7 @@ class OppdragUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return self.request.user.is_staff or self.get_object().opprettet_av == self.request.user
 
     def form_valid(self, form):
-        messages.success(self.request, 'Oppdrag oppdatert!')
+        messages.success(self.request, _('Oppdrag oppdatert!'))
         return super().form_valid(form)
 
 
@@ -207,7 +216,7 @@ class OppdragDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return self.request.user.is_staff
 
     def delete(self, request, *args, **kwargs):
-        messages.success(request, 'Oppdrag slettet!')
+        messages.success(request, _('Oppdrag slettet!'))
         return super().delete(request, *args, **kwargs)
 
 
@@ -219,9 +228,9 @@ class PameldingView(LoginRequiredMixin, View):
         oppdrag = get_object_or_404(Oppdrag, pk=pk)
         if request.user not in oppdrag.pameldte.all():
             oppdrag.pameldte.add(request.user)
-            messages.success(request, f'Du er nå påmeldt "{oppdrag.tittel}"!')
+            messages.success(request, _('Du er nå påmeldt "%(title)s"!') % {'title': oppdrag.tittel})
         else:
-            messages.info(request, 'Du er allerede påmeldt dette oppdraget.')
+            messages.info(request, _('Du er allerede påmeldt dette oppdraget.'))
         return redirect('oppdrag_detalj', pk=pk)
 
 
@@ -233,7 +242,7 @@ class AvmeldingView(LoginRequiredMixin, View):
         oppdrag = get_object_or_404(Oppdrag, pk=pk)
         if request.user in oppdrag.pameldte.all():
             oppdrag.pameldte.remove(request.user)
-            messages.success(request, f'Du er nå avmeldt "{oppdrag.tittel}".')
+            messages.success(request, _('Du er nå avmeldt "%(title)s".') % {'title': oppdrag.tittel})
         return redirect('oppdrag_detalj', pk=pk)
 
 
@@ -244,8 +253,26 @@ class NyhetListView(ListView):
     model = Nyhet
     template_name = 'nyhet_liste.html'
     context_object_name = 'nyheter'
-    paginate_by = 10
-    ordering = '-publisert_dato'
+    paginate_by = 5
+
+    def get_queryset(self):
+        qs = Nyhet.objects.select_related('opprettet_av').all().order_by('-publisert_dato')
+
+        search = self.request.GET.get('search', '')
+        if search:
+            qs = qs.filter(
+                Q(tittel__icontains=search) | Q(innhold__icontains=search)
+            )
+
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        query_params = self.request.GET.copy()
+        query_params.pop('page', None)
+        context['querystring'] = query_params.urlencode()
+        context['search_query'] = self.request.GET.get('search', '')
+        return context
 
 
 class NyhetDetailView(DetailView):
@@ -268,7 +295,7 @@ class NyhetCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.opprettet_av = self.request.user
-        messages.success(self.request, 'Nyhet publisert!')
+        messages.success(self.request, _('Nyhet publisert!'))
         return super().form_valid(form)
 
 
@@ -284,7 +311,7 @@ class NyhetUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return self.request.user.is_staff or self.get_object().opprettet_av == self.request.user
 
     def form_valid(self, form):
-        messages.success(self.request, 'Nyhet oppdatert!')
+        messages.success(self.request, _('Nyhet oppdatert!'))
         return super().form_valid(form)
 
 
@@ -299,7 +326,7 @@ class NyhetDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return self.request.user.is_staff
 
     def delete(self, request, *args, **kwargs):
-        messages.success(request, 'Nyhet slettet!')
+        messages.success(request, _('Nyhet slettet!'))
         return super().delete(request, *args, **kwargs)
 
 
@@ -310,10 +337,44 @@ class KategoriListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = Kategori
     template_name = 'kategori_liste.html'
     context_object_name = 'kategorier'
+    paginate_by = 5
+    login_url = 'login'
+
+    def get_queryset(self):
+        qs = Kategori.objects.all().order_by('navn')
+
+        search = self.request.GET.get('search', '')
+        if search:
+            qs = qs.filter(
+                Q(navn__icontains=search) | Q(beskrivelse__icontains=search)
+            )
+
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        query_params = self.request.GET.copy()
+        query_params.pop('page', None)
+        context['querystring'] = query_params.urlencode()
+        context['search_query'] = self.request.GET.get('search', '')
+        return context
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+
+class KategoriDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
+    """Detalj om kategori"""
+    model = Kategori
+    template_name = 'kategori_detalj.html'
+    context_object_name = 'kategori'
     login_url = 'login'
 
     def test_func(self):
         return self.request.user.is_staff
+
+    def get_queryset(self):
+        return Kategori.objects.prefetch_related('oppdrag__opprettet_av')
 
 
 class KategoriCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
@@ -328,7 +389,7 @@ class KategoriCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         return self.request.user.is_staff
 
     def form_valid(self, form):
-        messages.success(self.request, 'Kategori opprettet!')
+        messages.success(self.request, _('Kategori opprettet!'))
         return super().form_valid(form)
 
 
@@ -344,7 +405,7 @@ class KategoriUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return self.request.user.is_staff
 
     def form_valid(self, form):
-        messages.success(self.request, 'Kategori oppdatert!')
+        messages.success(self.request, _('Kategori oppdatert!'))
         return super().form_valid(form)
 
 
@@ -359,5 +420,5 @@ class KategoriDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return self.request.user.is_staff
 
     def delete(self, request, *args, **kwargs):
-        messages.success(request, 'Kategori slettet!')
+        messages.success(request, _('Kategori slettet!'))
         return super().delete(request, *args, **kwargs)

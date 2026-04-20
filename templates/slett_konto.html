@@ -1,34 +1,35 @@
 {% extends "base.html" %}
+{% load i18n %}
 
-{% block title %}Slett Konto - Nabohjelpen{% endblock %}
+{% block title %}{% trans 'Slett Konto' %} - Nabohjelpen{% endblock %}
 
 {% block content %}
 <div style="max-width: 600px; margin: 0 auto;">
     <div class="card" style="border-left: 4px solid #e74c3c;">
         <div class="card-header">
-            <h2 class="card-title">Slett Konto</h2>
+            <h2 class="card-title">{% trans 'Slett Konto' %}</h2>
         </div>
         <div class="card-body">
             <div style="background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 1rem; border-radius: 4px; margin-bottom: 1rem;">
-                <strong>⚠️ Advarsel!</strong>
-                <p>Hvis du sletter kontoen din, vil all data bli permanent slettet. Dette kan <strong>ikke</strong> angres!</p>
+                <strong>⚠️ {% trans 'Advarsel!' %}</strong>
+                <p>{% trans 'Hvis du sletter kontoen din, vil all data bli permanent slettet. Dette kan' %} <strong>{% trans 'ikke' %}</strong> {% trans 'angres!' %}</p>
             </div>
 
-            <p>Du kommer til å slette følgende:</p>
+            <p>{% trans 'Du kommer til å slette følgende:' %}</p>
             <ul>
-                <li>Din profil</li>
-                <li>Din registrering på oppdrag</li>
-                <li>All informasjon knyttet til kontoen</li>
+                <li>{% trans 'Din profil' %}</li>
+                <li>{% trans 'Din registrering på oppdrag' %}</li>
+                <li>{% trans 'All informasjon knyttet til kontoen' %}</li>
             </ul>
 
             <form method="post" style="margin-top: 2rem;">
                 {% csrf_token %}
-                <p>Skriv <strong>JA</strong> for å bekrefte at du vil slette kontoen:</p>
-                <input type="text" name="confirm" placeholder="Skriv JA" style="width: 100%; padding: 0.5rem; margin-bottom: 1rem; border: 1px solid #f5c6cb;">
+                <p>{% trans 'Skriv' %} <strong>JA</strong> {% trans 'for å bekrefte at du vil slette kontoen:' %}</p>
+                <input type="text" name="confirm" placeholder="{% trans 'Skriv JA' %}" style="width: 100%; padding: 0.5rem; margin-bottom: 1rem; border: 1px solid #f5c6cb;">
                 
                 <div class="mt-2">
-                    <button type="submit" class="btn btn-danger">Ja, slett kontoen min permanent</button>
-                    <a href="{% url 'dashboard' %}" class="btn btn-secondary">Avbryt</a>
+                    <button type="submit" class="btn btn-danger">{% trans 'Ja, slett kontoen min permanent' %}</button>
+                    <a href="{% url 'dashboard' %}" class="btn btn-secondary">{% trans 'Avbryt' %}</a>
                 </div>
             </form>
         </div>

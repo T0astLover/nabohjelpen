@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block title %}{{ nyhet.tittel }} - Nabohjelpen{% endblock %}
 
@@ -9,8 +10,8 @@
             <h2 class="card-title">{{ nyhet.tittel }}</h2>
             <p class="text-muted" style="margin: 0;">
                 <small>
-                    Publisert: {{ nyhet.publisert_dato|date:"d. M Y H:i" }}
-                    av {{ nyhet.opprettet_av.get_full_name|default:nyhet.opprettet_av.username }}
+                    {% trans 'Publisert:' %} {{ nyhet.publisert_dato|date:"d. M Y H:i" }}
+                    {% trans 'av' %} {{ nyhet.opprettet_av.get_full_name|default:nyhet.opprettet_av.username }}
                 </small>
             </p>
         </div>
@@ -20,13 +21,13 @@
             <!-- Admin handlinger -->
             {% if user.is_staff %}
                 <div style="border-top: 1px solid #bdc3c7; margin-top: 2rem; padding-top: 1rem;">
-                    <a href="{% url 'nyhet_rediger' nyhet.pk %}" class="btn btn-primary">Rediger</a>
-                    <a href="{% url 'nyhet_slett' nyhet.pk %}" class="btn btn-danger">Slett</a>
+                    <a href="{% url 'nyhet_rediger' nyhet.pk %}" class="btn btn-primary">{% trans 'Rediger' %}</a>
+                    <a href="{% url 'nyhet_slett' nyhet.pk %}" class="btn btn-danger">{% trans 'Slett' %}</a>
                 </div>
             {% endif %}
 
             <p class="mt-2">
-                <a href="{% url 'nyhet_liste' %}" class="btn btn-secondary">Tilbake til nyheter</a>
+                <a href="{% url 'nyhet_liste' %}" class="btn btn-secondary">{% trans 'Tilbake til nyheter' %}</a>
             </p>
         </div>
     </div>

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ kategori.navn }} - Nabohjelpen{% endblock %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 0 auto;">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">{{ kategori.navn }}</h2>
+        </div>
+        <div class="card-body">
+            <p><strong>{% trans 'Opprettet:' %}</strong> {{ kategori.opprettet|date:"d. M Y H:i" }}</p>
+            <p>{% if kategori.beskrivelse %}{{ kategori.beskrivelse }}{% else %}{% trans 'Ingen beskrivelse' %}{% endif %}</p>
+
+            <hr style="margin: 1rem 0; border: none; border-top: 1px solid #bdc3c7;">
+
+            <h3>{% trans 'Tilknyttede oppdrag' %}</h3>
+            {% if kategori.oppdrag.all %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>{% trans 'Tittel' %}</th>
+                            <th>{% trans 'Sted' %}</th>
+                            <th>{% trans 'Status' %}</th>
+                            <th>{% trans 'Handling' %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for oppdrag in kategori.oppdrag.all %}
+                            <tr>
+                                <td><strong>{{ oppdrag.tittel }}</strong></td>
+                                <td>{{ oppdrag.sted }}</td>
+                                <td>
+                                    {% if oppdrag.status == 'aapen' %}
+                                        <span class="badge badge-success">{% trans 'Åpen' %}</span>
+                                    {% elif oppdrag.status == 'paagaar' %}
+                                        <span class="badge badge-warning">{% trans 'Pågår' %}</span>
+                                    {% else %}
+                                        <span class="badge badge-danger">{% trans 'Fullført' %}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{% url 'oppdrag_detalj' oppdrag.pk %}" class="btn btn-primary btn-small">{% trans 'Detaljer' %}</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="text-muted">{% trans 'Ingen oppdrag er knyttet til denne kategorien.' %}</p>
+            {% endif %}
+
+            <div class="mt-2">
+                <a href="{% url 'kategori_liste' %}" class="btn btn-secondary">{% trans 'Tilbake til kategorier' %}</a>
+                <a href="{% url 'kategori_rediger' kategori.pk %}" class="btn btn-primary">{% trans 'Rediger' %}</a>
+                <a href="{% url 'kategori_slett' kategori.pk %}" class="btn btn-danger">{% trans 'Slett' %}</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
