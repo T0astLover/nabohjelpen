@@ -1,32 +1,35 @@
 {% extends "base.html" %}
+{% load i18n %}
 
-{% block title %}Publiser Nyhet - Nabohjelpen{% endblock %}
+{% block title %}{% trans 'Publiser Nyhet' %} - Nabohjelpen{% endblock %}
 
 {% block content %}
 <div style="max-width: 600px; margin: 0 auto;">
     <div class="card">
         <div class="card-header">
-            <h2 class="card-title">Publiser Nyhet</h2>
+            <h2 class="card-title">{% trans 'Publiser Nyhet' %}</h2>
         </div>
         <div class="card-body">
             <form method="post">
                 {% csrf_token %}
-                
-                <div class="form-group">
-                    <label>{{ form.tittel.label }}</label>
-                    {{ form.tittel }}
-                    {% if form.tittel.errors %}{{ form.tittel.errors }}{% endif %}
-                </div>
 
-                <div class="form-group">
-                    <label>{{ form.innhold.label }}</label>
-                    {{ form.innhold }}
-                    {% if form.innhold.errors %}{{ form.innhold.errors }}{% endif %}
-                </div>
+                {% if form.non_field_errors %}
+                    <div class="form-group">
+                        <ul class="errorlist" role="alert" aria-live="polite">
+                            {% for error in form.non_field_errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+
+                {% for field in form.visible_fields %}
+                    {% include "includes/form_field.html" with field=field %}
+                {% endfor %}
 
                 <div class="mt-2">
-                    <button type="submit" class="btn btn-success">Publiser</button>
-                    <a href="{% url 'nyhet_liste' %}" class="btn btn-secondary">Avbryt</a>
+                    <button type="submit" class="btn btn-success">{% trans 'Publiser' %}</button>
+                    <a href="{% url 'nyhet_liste' %}" class="btn btn-secondary">{% trans 'Avbryt' %}</a>
                 </div>
             </form>
         </div>

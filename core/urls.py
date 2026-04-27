@@ -34,6 +34,7 @@ urlpatterns = [
     
     # Kategorier
     path('kategorier/', views.KategoriListView.as_view(), name='kategori_liste'),
+    path('kategorier/<int:pk>/', views.KategoriDetailView.as_view(), name='kategori_detalj'),
     path('kategorier/opprett/', views.KategoriCreateView.as_view(), name='kategori_opprett'),
     path('kategorier/<int:pk>/rediger/', views.KategoriUpdateView.as_view(), name='kategori_rediger'),
     path('kategorier/<int:pk>/slett/', views.KategoriDeleteView.as_view(), name='kategori_slett'),
