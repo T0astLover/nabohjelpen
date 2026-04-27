@@ -18,7 +18,8 @@
     <div class="card-body">
         <form method="get" style="display: flex; gap: 1rem; flex-wrap: wrap;">
             <div style="flex: 1; min-width: 200px;">
-                <input type="text" name="search" placeholder="{% trans 'Søk i nyheter...' %}" value="{{ search_query }}" class="form-control">
+                <label for="nyhet-search" class="visually-hidden">{% trans 'Søk i nyheter' %}</label>
+                <input type="text" id="nyhet-search" name="search" placeholder="{% trans 'Søk i nyheter...' %}" value="{{ search_query }}" class="form-control">
             </div>
             <button type="submit" class="btn btn-primary">{% trans 'Søk' %}</button>
         </form>

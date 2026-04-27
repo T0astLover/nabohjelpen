@@ -10,40 +10,33 @@
             <h2 class="card-title">{{ oppdrag.tittel }}</h2>
         </div>
         <div class="card-body">
-            <table style="width: 100%; border: none;">
-                <tr style="border: none;">
-                    <td style="border: none; font-weight: bold; width: 150px;">{% trans 'Kategori:' %}</td>
-                    <td style="border: none;">{{ oppdrag.kategori }}</td>
-                </tr>
-                <tr style="border: none;">
-                    <td style="border: none; font-weight: bold;">{% trans 'Sted:' %}</td>
-                    <td style="border: none;">{{ oppdrag.sted }}</td>
-                </tr>
-                <tr style="border: none;">
-                    <td style="border: none; font-weight: bold;">{% trans 'Status:' %}</td>
-                    <td style="border: none;">
-                        {% if oppdrag.status == 'aapen' %}
-                            <span class="badge badge-success">{% trans 'Åpen' %}</span>
-                        {% elif oppdrag.status == 'paagaar' %}
-                            <span class="badge badge-warning">{% trans 'Pågår' %}</span>
-                        {% else %}
-                            <span class="badge badge-danger">{% trans 'Fullført' %}</span>
-                        {% endif %}
-                    </td>
-                </tr>
-                <tr style="border: none;">
-                    <td style="border: none; font-weight: bold;">{% trans 'Opprettet av:' %}</td>
-                    <td style="border: none;">{{ oppdrag.opprettet_av.get_full_name|default:oppdrag.opprettet_av.username }}</td>
-                </tr>
-                <tr style="border: none;">
-                    <td style="border: none; font-weight: bold;">{% trans 'Opprettet:' %}</td>
-                    <td style="border: none;">{{ oppdrag.opprettet|date:"d. M Y H:i" }}</td>
-                </tr>
-                <tr style="border: none;">
-                    <td style="border: none; font-weight: bold;">{% trans 'Påmeldte:' %}</td>
-                    <td style="border: none;">{% blocktrans with count=oppdrag.antall_pameldte %}{{ count }} frivillige{% endblocktrans %}</td>
-                </tr>
-            </table>
+            <dl class="details-list">
+                <dt>{% trans 'Kategori' %}</dt>
+                <dd>{{ oppdrag.kategori }}</dd>
+
+                <dt>{% trans 'Sted' %}</dt>
+                <dd>{{ oppdrag.sted }}</dd>
+
+                <dt>{% trans 'Status' %}</dt>
+                <dd>
+                    {% if oppdrag.status == 'aapen' %}
+                        <span class="badge badge-success">{% trans 'Åpen' %}</span>
+                    {% elif oppdrag.status == 'paagaar' %}
+                        <span class="badge badge-warning">{% trans 'Pågår' %}</span>
+                    {% else %}
+                        <span class="badge badge-danger">{% trans 'Fullført' %}</span>
+                    {% endif %}
+                </dd>
+
+                <dt>{% trans 'Opprettet av' %}</dt>
+                <dd>{{ oppdrag.opprettet_av.get_full_name|default:oppdrag.opprettet_av.username }}</dd>
+
+                <dt>{% trans 'Opprettet' %}</dt>
+                <dd>{{ oppdrag.opprettet|date:"d. M Y H:i" }}</dd>
+
+                <dt>{% trans 'Påmeldte' %}</dt>
+                <dd>{% blocktrans with count=oppdrag.antall_pameldte %}{{ count }} frivillige{% endblocktrans %}</dd>
+            </dl>
 
             <hr style="margin: 1rem 0; border: none; border-top: 1px solid #bdc3c7;">
 

@@ -45,13 +45,14 @@
 
 <div class="card">
     <div class="card-body">
-        <h1 class="text-center">🏘️ {% trans 'Velkommen til Nabohjelpen!' %}</h1>
+        <h1 class="text-center"><span aria-hidden="true">🏘️</span> {% trans 'Velkommen til Nabohjelpen!' %}</h1>
         <p class="text-center mb-2">{% trans 'En plattform der naboer hjelper naboer' %}</p>
         
         <div class="text-center mb-2">
             <p style="font-size: 1.1rem; line-height: 1.8;">
                 {% trans 'Nabohjelpen er en frivillighetsplattform som knytter sammen folk i lokalsamfunnet.' %}
                 {% trans 'Her kan du melde deg på oppdrag du ønsker å hjelpe til med, eller be om hjelp fra andre frivillige.' %}
+            </p>
         </div>
     </div>
 </div>
@@ -60,25 +61,25 @@
 <div class="stats-row">
     <div class="card">
         <div class="card-body text-center">
-            <h3>👥 {{ antall_medlemmer }}</h3>
+            <h3><span aria-hidden="true">👥</span> {{ antall_medlemmer }}</h3>
             <p>{% trans 'Frivillige medlemmer' %}</p>
         </div>
     </div>
     <div class="card">
         <div class="card-body text-center">
-            <h3>📋 {{ aapne_oppdrag_count }}</h3>
+            <h3><span aria-hidden="true">📋</span> {{ aapne_oppdrag_count }}</h3>
             <p>{% trans 'Åpne oppdrag' %}</p>
         </div>
     </div>
     <div class="card">
         <div class="card-body text-center">
-            <h3>✅ {{ fullforte_oppdrag_count }}</h3>
+            <h3><span aria-hidden="true">✅</span> {{ fullforte_oppdrag_count }}</h3>
             <p>{% trans 'Fullførte oppdrag' %}</p>
         </div>
     </div>
     <div class="card">
         <div class="card-body text-center">
-            <h3>📰 {{ nyeste_nyheter|length }}</h3>
+            <h3><span aria-hidden="true">📰</span> {{ nyeste_nyheter|length }}</h3>
             <p>{% trans 'Nyeste nyheter' %}</p>
         </div>
     </div>
@@ -86,7 +87,7 @@
 
 <!-- Nyeste oppdrag -->
 <div class="mt-2">
-    <h2>📋 {% trans 'Nyeste oppdrag' %}</h2>
+    <h2><span aria-hidden="true">📋</span> {% trans 'Nyeste oppdrag' %}</h2>
     {% if nyeste_oppdrag %}
         <div class="grid">
             {% for oppdrag in nyeste_oppdrag %}
@@ -112,7 +113,7 @@
 
 <!-- Nyeste nyheter -->
 <div class="mt-2">
-    <h2>📰 {% trans 'Nyeste nyheter' %}</h2>
+    <h2><span aria-hidden="true">📰</span> {% trans 'Nyeste nyheter' %}</h2>
     {% if nyeste_nyheter %}
         <div class="grid">
             {% for nyhet in nyeste_nyheter %}

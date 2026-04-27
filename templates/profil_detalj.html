@@ -10,28 +10,22 @@
             <h2 class="card-title">{% trans 'Min Profil' %}</h2>
         </div>
         <div class="card-body">
-            <table style="width: 100%; border: none;">
-                <tr style="border: none;">
-                    <td style="border: none; font-weight: bold; width: 150px;">{% trans 'Navn:' %}</td>
-                    <td style="border: none;">{{ profil.user.get_full_name }}</td>
-                </tr>
-                <tr style="border: none;">
-                    <td style="border: none; font-weight: bold;">{% trans 'Brukernavn:' %}</td>
-                    <td style="border: none;">{{ profil.user.username }}</td>
-                </tr>
-                <tr style="border: none;">
-                    <td style="border: none; font-weight: bold;">{% trans 'E-post:' %}</td>
-                    <td style="border: none;">{{ profil.user.email }}</td>
-                </tr>
-                <tr style="border: none;">
-                    <td style="border: none; font-weight: bold;">{% trans 'Telefon:' %}</td>
-                    <td style="border: none;">{% if profil.telefon %}{{ profil.telefon }}{% else %}{% trans 'Ikke angitt' %}{% endif %}</td>
-                </tr>
-                <tr style="border: none;">
-                    <td style="border: none; font-weight: bold;">{% trans 'Medlem siden:' %}</td>
-                    <td style="border: none;">{{ profil.opprettet|date:"d. M Y" }}</td>
-                </tr>
-            </table>
+            <dl class="details-list">
+                <dt>{% trans 'Navn' %}</dt>
+                <dd>{{ profil.user.get_full_name }}</dd>
+
+                <dt>{% trans 'Brukernavn' %}</dt>
+                <dd>{{ profil.user.username }}</dd>
+
+                <dt>{% trans 'E-post' %}</dt>
+                <dd>{{ profil.user.email }}</dd>
+
+                <dt>{% trans 'Telefon' %}</dt>
+                <dd>{% if profil.telefon %}{{ profil.telefon }}{% else %}{% trans 'Ikke angitt' %}{% endif %}</dd>
+
+                <dt>{% trans 'Medlem siden' %}</dt>
+                <dd>{{ profil.opprettet|date:"d. M Y" }}</dd>
+            </dl>
 
             <hr style="margin: 1rem 0; border: none; border-top: 1px solid #bdc3c7;">
 

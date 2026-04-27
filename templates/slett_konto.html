@@ -10,10 +10,10 @@
             <h2 class="card-title">{% trans 'Slett Konto' %}</h2>
         </div>
         <div class="card-body">
-            <div style="background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 1rem; border-radius: 4px; margin-bottom: 1rem;">
+            <aside role="alert" aria-live="polite" style="background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 1rem; border-radius: 4px; margin-bottom: 1rem;">
                 <strong>⚠️ {% trans 'Advarsel!' %}</strong>
                 <p>{% trans 'Hvis du sletter kontoen din, vil all data bli permanent slettet. Dette kan' %} <strong>{% trans 'ikke' %}</strong> {% trans 'angres!' %}</p>
-            </div>
+            </aside>
 
             <p>{% trans 'Du kommer til å slette følgende:' %}</p>
             <ul>
@@ -24,8 +24,8 @@
 
             <form method="post" style="margin-top: 2rem;">
                 {% csrf_token %}
-                <p>{% trans 'Skriv' %} <strong>JA</strong> {% trans 'for å bekrefte at du vil slette kontoen:' %}</p>
-                <input type="text" name="confirm" placeholder="{% trans 'Skriv JA' %}" style="width: 100%; padding: 0.5rem; margin-bottom: 1rem; border: 1px solid #f5c6cb;">
+                <label for="confirm-delete">{% trans 'Skriv' %} <strong>JA</strong> {% trans 'for å bekrefte at du vil slette kontoen:' %}</label>
+                <input id="confirm-delete" type="text" name="confirm" placeholder="{% trans 'Skriv JA' %}" required style="width: 100%; padding: 0.5rem; margin: 0.5rem 0 1rem; border: 1px solid #f5c6cb;">
                 
                 <div class="mt-2">
                     <button type="submit" class="btn btn-danger">{% trans 'Ja, slett kontoen min permanent' %}</button>

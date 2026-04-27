@@ -18,11 +18,13 @@
     <div class="card-body">
         <form method="get" style="display: flex; gap: 1rem; flex-wrap: wrap;">
             <div style="flex: 1; min-width: 200px;">
-                <input type="text" name="search" placeholder="{% trans 'Søk i oppdrag...' %}" value="{{ request.GET.search }}" class="form-control">
+                <label for="oppdrag-search" class="visually-hidden">{% trans 'Søk i oppdrag' %}</label>
+                <input type="text" id="oppdrag-search" name="search" placeholder="{% trans 'Søk i oppdrag...' %}" value="{{ request.GET.search }}" class="form-control">
             </div>
             
             <div style="flex: 1; min-width: 200px;">
-                <select name="kategori" class="form-control">
+                <label for="oppdrag-kategori" class="visually-hidden">{% trans 'Filtrer på kategori' %}</label>
+                <select id="oppdrag-kategori" name="kategori" class="form-control">
                     <option value="">-- {% trans 'Alle kategorier' %} --</option>
                     {% for kat in kategorier %}
                         <option value="{{ kat.id }}" {% if request.GET.kategori|stringformat:"s" == kat.id|stringformat:"s" %}selected{% endif %}>
@@ -33,7 +35,8 @@
             </div>
 
             <div style="flex: 1; min-width: 200px;">
-                <select name="status" class="form-control">
+                <label for="oppdrag-status" class="visually-hidden">{% trans 'Filtrer på status' %}</label>
+                <select id="oppdrag-status" name="status" class="form-control">
                     <option value="">-- {% trans 'Alle status' %} --</option>
                     {% for val, label in status_choices %}
                         <option value="{{ val }}" {% if request.GET.status == val %}selected{% endif %}>
