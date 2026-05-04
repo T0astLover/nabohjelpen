@@ -4,6 +4,9 @@ En komplett Django-applikasjon for en norsk frivillighetsplattform som kobler sa
 
 ## Teknologi
 
+- **ChatGPT Plus** hoved AI   
+- **inbygget Copilot** ansvar for visual studio code 
+- **Figma sin innbygget Ai/KI** planleging
 - **Django 6.0** - Web framework
 - **SQLite** - Database
 - **Python 3.10+** - Programming language
@@ -122,7 +125,7 @@ nabohjelpen/
 
 ### 1. Klone eller åpne prosjektet
 ```bash
-cd c:\Users\nikol\Downloads\nabohjelpen
+cd c:\Users\bruker\Downloads\nabohjelpen
 ```
 
 ### 2. Opprett virtual environment (hvis ikke allerede gjort)
@@ -269,6 +272,48 @@ For å teste med testdata i admin:
 4. Opprett et par nyheter
 5. Registrer deg som bruker og test funksjonalitet
 
+## Oppgave 3.3 Leveranse
+
+Denne versjonen er oppgradert mot standardkravene i oppgave 3.3:
+
+- ModelForm for alle relevante tabeller som administreres: `Profil`, `Oppdrag`, `Kategori`, `Nyhet`.
+- Tilpassede skjemaopplevelser med widgets, placeholders og hjelpetekster.
+- Flere valideringsregler på felt- og skjemanivå.
+- Brukerorienterte feilmeldinger med tydelig språk.
+- Universell utforming med koblede labels, fokusmarkering og kobling mellom felt/hjelpetekst/feil via `aria-describedby`.
+
+### Valideringsregler (eksempler)
+
+- Registrering:
+   - Unik e-post (case-insensitiv).
+   - Brukernavn unikt og minimum lengde.
+   - Norsk telefonnummerformat.
+   - Fornavn og etternavn kan ikke være like.
+- Profil:
+   - Telefon, hjelpeområde og tilgjengelighet er påkrevde.
+   - Telefon valideres mot norsk format.
+   - Konsistensregel mellom hjelpeområde og tilgjengelighet.
+- Oppdrag:
+   - Minimum lengde på tittel/beskrivelse/sted.
+   - Sted kan ikke være identisk med tittel.
+   - Ved status `fullfort` kreves mer utfyllende beskrivelse.
+- Kategori:
+   - Minimum lengde på navn.
+   - Unikt kategorinavn (case-insensitivt).
+- Nyhet:
+   - Minimum lengde på tittel og innhold.
+   - Innhold kan ikke være identisk med tittel.
+
+### Dokumentasjon til PR/Teams
+
+Legg ved disse skjermbildene i Pull Request og Teams-dokumentasjon:
+
+1. Skjema i normaltilstand.
+2. Skjema med feilmeldinger.
+3. Skjema med vellykket innsending.
+
+Anbefalt å dokumentere per tabell (`Profil`, `Oppdrag`, `Kategori`, `Nyhet`) for å dekke leveransekravet.
+
 ## Produksjonsveileding
 
 For å kjøre i produksjon, husk å:
@@ -288,7 +333,7 @@ For å kjøre i produksjon, husk å:
 
 ## Lisens
 
-Privat skoleprojekt - alle koder eieredd av skolen/eleven.
+Privat skoleprojekt - alle koder eieredd av eleven.
 
 ---
 

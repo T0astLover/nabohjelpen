@@ -1,26 +1,27 @@
 {% extends "base.html" %}
+{% load i18n %}
 
-{% block title %}Slett Oppdrag - Nabohjelpen{% endblock %}
+{% block title %}{% trans 'Slett Oppdrag' %} - Nabohjelpen{% endblock %}
 
 {% block content %}
 <div style="max-width: 600px; margin: 0 auto;">
     <div class="card" style="border-left: 4px solid #e74c3c;">
         <div class="card-header">
-            <h2 class="card-title">Slett Oppdrag</h2>
+            <h2 class="card-title">{% trans 'Slett Oppdrag' %}</h2>
         </div>
         <div class="card-body">
-            <p>Du holder på å slette følgende oppdrag:</p>
+            <p>{% trans 'Du holder på å slette følgende oppdrag:' %}</p>
             <div style="background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 1rem; border-radius: 4px; margin-bottom: 1rem;">
                 <strong>{{ oppdrag.tittel }}</strong>
                 <p style="margin: 0.5rem 0 0 0; color: #721c24;">
-                    Dette vil slette oppdraget og alt tilhørende data.
+                    {% trans 'Dette vil slette oppdraget og alt tilhørende data.' %}
                 </p>
             </div>
 
             <form method="post">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-danger">Ja, slett oppdraget</button>
-                <a href="{% url 'oppdrag_detalj' oppdrag.pk %}" class="btn btn-secondary">Avbryt</a>
+                <button type="submit" class="btn btn-danger">{% trans 'Ja, slett oppdraget' %}</button>
+                <a href="{% url 'oppdrag_detalj' oppdrag.pk %}" class="btn btn-secondary">{% trans 'Avbryt' %}</a>
             </form>
         </div>
     </div>

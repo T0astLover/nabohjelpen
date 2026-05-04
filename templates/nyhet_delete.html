@@ -1,23 +1,24 @@
 {% extends "base.html" %}
+{% load i18n %}
 
-{% block title %}Slett Nyhet - Nabohjelpen{% endblock %}
+{% block title %}{% trans 'Slett Nyhet' %} - Nabohjelpen{% endblock %}
 
 {% block content %}
 <div style="max-width: 600px; margin: 0 auto;">
     <div class="card" style="border-left: 4px solid #e74c3c;">
         <div class="card-header">
-            <h2 class="card-title">Slett Nyhet</h2>
+            <h2 class="card-title">{% trans 'Slett Nyhet' %}</h2>
         </div>
         <div class="card-body">
-            <p>Du holder på å slette følgende nyhet:</p>
-            <div style="background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 1rem; border-radius: 4px; margin-bottom: 1rem;">
+            <p>{% trans 'Du holder på å slette følgende nyhet:' %}</p>
+            <aside role="alert" aria-live="polite" style="background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 1rem; border-radius: 4px; margin-bottom: 1rem;">
                 <strong>{{ nyhet.tittel }}</strong>
-            </div>
+            </aside>
 
             <form method="post">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-danger">Ja, slett nyheten</button>
-                <a href="{% url 'nyhet_detalj' nyhet.pk %}" class="btn btn-secondary">Avbryt</a>
+                <button type="submit" class="btn btn-danger">{% trans 'Ja, slett nyheten' %}</button>
+                <a href="{% url 'nyhet_detalj' nyhet.pk %}" class="btn btn-secondary">{% trans 'Avbryt' %}</a>
             </form>
         </div>
     </div>

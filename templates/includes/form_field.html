@@ -1,0 +1,19 @@
+{% load i18n %}
+<div class="form-group{% if field.errors %} has-error{% endif %}">
+    {{ field.label_tag }}
+    {{ field }}
+
+    {% if field.help_text %}
+        <small id="id_{{ field.name }}_help" class="text-muted">{{ field.help_text }}</small>
+    {% endif %}
+
+    {% if field.errors %}
+        <ul id="id_{{ field.name }}_error" class="errorlist" role="alert" aria-live="polite">
+            {% for error in field.errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div id="id_{{ field.name }}_error" class="visually-hidden" aria-live="polite"></div>
+    {% endif %}
+</div>
