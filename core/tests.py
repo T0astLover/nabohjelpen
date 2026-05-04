@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 from .forms import RegistreringForm, ProfilForm, OppdragForm, KategoriForm, NyhetForm
 from .models import Kategori, Profil
@@ -77,3 +78,109 @@ class FormValidationTests(TestCase):
 		})
 		self.assertFalse(form.is_valid())
 		self.assertIn('innhold', form.errors)
+
+
+class KategoriCrudTests(TestCase):
+	def setUp(self):
+		self.staff_user = User.objects.create_user(
+			username='adminbruker',
+			email='admin@example.com',
+			password='trygt-passord-123',
+			is_staff=True,
+		)
+		self.regular_user = User.objects.create_user(
+			username='vanligbruker',
+			email='bruker@example.com',
+			password='trygt-passord-123',
+		)
+		self.kategori = Kategori.objects.create(
+			navn='Handling',
+			beskrivelse='Hjelp med handling',
+		)
+
+	def test_create_kategori_succeeds_with_valid_data(self):
+		self.client.force_login(self.staff_user)
+		response = self.client.post(reverse('kategori_opprett'), data={
+			'navn': 'Omsorg',
+			'beskrivelse': 'Praktisk hjelp og støtte til sårbare personer',
+		})
+
+		self.assertRedirects(response, reverse('kategori_liste'))
+		self.assertTrue(Kategori.objects.filter(navn='Omsorg').exists())
+
+	def test_kategori_list_view_shows_existing_categories_to_staff(self):
+		self.client.force_login(self.staff_user)
+		response = self.client.get(reverse('kategori_liste'))
+
+		self.assertEqual(response.status_code, 200)
+		self.assertContains(response, self.kategori.navn)
+
+	def test_kategori_detail_view_shows_category_details_to_staff(self):
+		self.client.force_login(self.staff_user)
+		response = self.client.get(reverse('kategori_detalj', args=[self.kategori.pk]))
+
+		self.assertEqual(response.status_code, 200)
+		self.assertContains(response, self.kategori.navn)
+		self.assertContains(response, self.kategori.beskrivelse)
+
+	def test_kategori_update_view_changes_category(self):
+		self.client.force_login(self.staff_user)
+		response = self.client.post(reverse('kategori_rediger', args=[self.kategori.pk]), data={
+			'navn': 'Oppfølging',
+			'beskrivelse': 'Kategori for videre oppfølging og støtte',
+		})
+
+		self.assertRedirects(response, reverse('kategori_liste'))
+		self.kategori.refresh_from_db()
+		self.assertEqual(self.kategori.navn, 'Oppfølging')
+		self.assertEqual(self.kategori.beskrivelse, 'Kategori for videre oppfølging og støtte')
+
+	def test_kategori_delete_view_removes_category(self):
+		self.client.force_login(self.staff_user)
+		response = self.client.post(reverse('kategori_slett', args=[self.kategori.pk]))
+
+		self.assertRedirects(response, reverse('kategori_liste'))
+		self.assertFalse(Kategori.objects.filter(pk=self.kategori.pk).exists())
+
+	def test_kategori_create_view_rejects_duplicate_name_case_insensitive(self):
+		self.client.force_login(self.staff_user)
+		response = self.client.post(reverse('kategori_opprett'), data={
+			'navn': 'handling',
+			'beskrivelse': 'Duplikat med ulik store/små bokstaver',
+		})
+
+		self.assertEqual(response.status_code, 200)
+		self.assertIn('navn', response.context['form'].errors)
+		self.assertIn(
+			'Kategorinavnet finnes allerede. Velg et annet navn.',
+			response.context['form'].errors['navn'],
+		)
+		self.assertEqual(Kategori.objects.filter(navn__iexact='handling').count(), 1)
+
+	def test_kategori_create_view_rejects_short_name(self):
+		self.client.force_login(self.staff_user)
+		response = self.client.post(reverse('kategori_opprett'), data={
+			'navn': 'ab',
+			'beskrivelse': 'For kort navn skal ikke lagres',
+		})
+
+		self.assertEqual(response.status_code, 200)
+		self.assertIn('navn', response.context['form'].errors)
+		self.assertIn(
+			'Kategorinavnet må være minst 3 tegn langt.',
+			response.context['form'].errors['navn'],
+		)
+		self.assertFalse(Kategori.objects.filter(navn='ab').exists())
+
+	def test_kategori_create_view_redirects_anonymous_users_to_login(self):
+		response = self.client.get(reverse('kategori_opprett'))
+
+		self.assertEqual(response.status_code, 302)
+		self.assertIn(reverse('login'), response.url)
+		self.assertIn(reverse('kategori_opprett'), response.url)
+
+	def test_kategori_create_view_forbidden_for_non_staff_users(self):
+		self.client.force_login(self.regular_user)
+		response = self.client.get(reverse('kategori_opprett'))
+
+		self.assertEqual(response.status_code, 403)
